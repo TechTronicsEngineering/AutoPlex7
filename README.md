@@ -11,7 +11,7 @@ AutoPlex7 is a simple and versatile Arduino library for controlling seven segmen
 - Built-in, global "display" object
 
 ### Usage
-At the top of your sketch, you'll need to set up a few things for AutoPlex7 to work properly. Firstly, we'll need to state that we are using AutoPlex7, like this.
+At the top of your sketch, you'll need to set up a few things for the library to work properly. Firstly, we'll need to state that we are using AutoPlex7, like this.
 ```C++
 #include <AutoPlex7.h>
 ```
@@ -21,7 +21,7 @@ int displayType = COMMON_ANODE;
 ```
 If you're using a common cathode display, just replace "COMMON_ANODE" with "COMMON_CATHODE."
 
-Next, we'll need to define the digital pins your seven segment display is connected to. We'll start with the digit pins.
+Now, we'll define the digital pins your seven segment display is connected to. We'll start with the digit pins.
 ```C++
 int D1 = // Type the digital pin D1 is connected to here;
 int D2 = // Type the digital pin D2 is connected to here;
@@ -57,5 +57,5 @@ int D = 8;
 int E = 9;
 int F = 10;
 int G = 11;
-int DP = 11;
+int DP = 12;
 ```
