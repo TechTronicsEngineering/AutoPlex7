@@ -59,3 +59,21 @@ int F = 10;
 int G = 11;
 int DP = 12;
 ```
+
+After you're done setting up the paremeters, you'll need to initiallize the seven segment display. This can be done by calling:
+```C++
+display.begin();
+```
+This will complete the setup process and activate the display.
+It's also recommended that, after calling ```display.begin``` you ue the built in display test command to ensure functionality of the display.
+```C++
+display.testDisplay();
+```
+This will light up all digits, segments, and decimals.
+After this, you can use ```delay(1000);``` to wait one second, and then clear the display.
+```C++
+display.clearDisplay();
+```
+This turns off all digits, segments, and decimals; and the display is now ready for use.
+
+Now that we understand how to set up AutoPlex7, let's take a look at some of the commands you can use in your sketches.
