@@ -10,7 +10,7 @@ AutoPlex7 is a simple and versatile Arduino library for controlling seven segmen
 - Has a flexible pin layout; letting you connect any display pin to any of Arduino's digital pins
 - Built-in, global "display" object
 
-### Usage
+### Setup
 At the top of your sketch, you'll need to set up a few things for the library to work properly. Firstly, we'll need to state that we are using AutoPlex7, like this.
 ```C++
 #include <AutoPlex7.h>
@@ -65,7 +65,7 @@ After you're done setting up the paremeters, you'll need to initiallize the seve
 display.begin();
 ```
 This will complete the setup process and activate the display.
-It's also recommended that, after calling ```display.begin()``` you ue the built in display test command to ensure functionality of the display.
+It's generally recommended that, after calling ```display.begin()``` you use the built in display test command to ensure functionality of the display.
 ```C++
 display.testDisplay();
 ```
@@ -74,6 +74,36 @@ After this, you can use ```delay(1000)``` to wait one second, and then clear the
 ```C++
 display.clearDisplay();
 ```
-This turns off all digits, segments, and decimals; and the display is now ready for use.
+This turns off all digits, segments, and decimals. The display is ready for use.
 
-Now that we understand how to set up AutoPlex7, let's take a look at some of the commands you can use in your sketches.
+### Commands
+Now that you've initiallized ths display, you can start using it. Let's take a look at the commands you can use to control the screen.
+
+We'll start with the most straightforward.
+```C++
+display.showNumber(int number);
+```
+This command simply shows any number you put in the parenthesis on the screen. For example, if you wish to display "1234," you can do this:
+```C++
+display.showNumber(1234);
+```
+You can also put a variable in the parenthesis.
+```C++
+display.showNumber(voltageatpinA5);
+```
+
+From time to time, you'll need to clear the display. That can be done using:
+```C++
+display.clearDisplay();
+```
+
+If you need to show a decimal, you can use these two commands in combination:
+```C++
+display.setDigit(// Choose which digit to show the decimal on by typing it's number);
+display.showDecimal():
+```
+To get rid of the decimal:
+```C++
+display.setDigit(// Choose which digit to clear the decimal on by typing it's number);
+display.clearDecimal();
+```
