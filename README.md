@@ -65,12 +65,12 @@ After you're done setting up the paremeters, you'll need to initiallize the seve
 display.begin();
 ```
 This will complete the setup process and activate the display.
-It's also recommended that, after calling ```display.begin``` you ue the built in display test command to ensure functionality of the display.
+It's also recommended that, after calling ```display.begin()``` you ue the built in display test command to ensure functionality of the display.
 ```C++
 display.testDisplay();
 ```
 This will light up all digits, segments, and decimals.
-After this, you can use ```delay(1000);``` to wait one second, and then clear the display.
+After this, you can use ```delay(1000)``` to wait one second, and then clear the display.
 ```C++
 display.clearDisplay();
 ```
