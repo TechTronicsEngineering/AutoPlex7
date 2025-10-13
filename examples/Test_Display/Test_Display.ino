@@ -26,7 +26,7 @@
 #include <AutoPlex7.h>
 
 // Set up the type of display and connections
-int displayType = COMMON_CATHODE; // Change to "COMMON_CATHODE" if using a common cathode display
+int displayType = COMMON_ANODE; // Change to "COMMON_CATHODE" if using a common cathode display
 int D1 = 1;
 int D2 = 2;
 int D3 = 3;
