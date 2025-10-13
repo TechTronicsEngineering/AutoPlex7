@@ -28,7 +28,7 @@ int D2 = // Type the digital pin D2 is connected to here;
 int D3 = // Type the digital pin D3 is connected to here;
 int D4 = // Type the digital pin D4 is connected to here;
 ```
-**IMPOTANT NOTE:** Even if your display does not have four digits, you'll still need to define the pins for the digits you don't have. Just leave these pins unconnected. For instance, if you use a two digit display, you could write that D3 and D4 are connected to pins 12 and 13. Leave pins 12 and 13 unused.
+**IMPOTANT NOTE:** Even if your display does not have four digits, you'll still need to define the pins for the digits you don't have. Just leave these pins unconnected. For instance, if you use a two digit display, you could write that D1 is connnected to 10, D2 to 11, D3 to 12, and D4 is 13. You would wire it so that D1 connects to pin 12, and D2 to pin 13. Leave pins 10 and 11 unused.
 
 Next, we'll define what Arduino pins the display's segment pins are connected to.
 ```C++
