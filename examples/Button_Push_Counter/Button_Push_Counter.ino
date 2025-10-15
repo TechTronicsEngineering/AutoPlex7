@@ -5,18 +5,18 @@
 
   The circuit:
   - Pushbutton connected between pin 13 and ground
-  - Display pin A -> 270Ω -> Arduino digital pin 5
-  - Display pin B -> 270Ω -> Arduino digital pin 6
-  - Display pin C -> 270Ω -> Arduino digital pin 7
-  - Display pin D -> 270Ω -> Arduino digital pin 8
-  - Display pin E -> 270Ω -> Arduino digital pin 9
-  - Display pin F -> 270Ω -> Arduino digital pin 10
-  - Display pin G -> 270Ω -> Arduino digital pin 11
-  - Display pin DP -> 270Ω -> Arduino digital pin 12
-  - Display Digit pin 1 -> Arduino pin 1
-  - Display Digit pin 2 -> Arduino pin 2 (if you don't have two digits, just leave pin 2 unused)
-  - Display Digit pin 3 -> Arduino pin 3 (if you don't have three digits, just leave pin 3 unused)
-  - Display Digit pin 4 -> Arduino pin 4 (if you don't have four digits, just leave pin 4 unused)
+  - Display pin A -> Arduino digital pin 5
+  - Display pin B -> Arduino digital pin 6
+  - Display pin C -> Arduino digital pin 7
+  - Display pin D -> Arduino digital pin 8
+  - Display pin E -> Arduino digital pin 9
+  - Display pin F -> Arduino digital pin 10
+  - Display pin G -> Arduino digital pin 11
+  - Display pin DP -> Arduino digital pin 12
+  - Display Digit pin 1 -> 270Ω -> Arduino pin 1
+  - Display Digit pin 2 -> 270Ω -> Arduino pin 2 (if you don't have two digits, just leave pin 2 unused)
+  - Display Digit pin 3 -> 270Ω -> Arduino pin 3 (if you don't have three digits, just leave pin 3 unused)
+  - Display Digit pin 4 -> 270Ω -> Arduino pin 4 (if you don't have four digits, just leave pin 4 unused)
 
   created 10/12/2025
   by Nyjah
