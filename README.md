@@ -11,7 +11,7 @@ AutoPlex7 is a simple and versatile Arduino library for controlling seven segmen
 - Built-in, global "display" object
 
 ## Warning
-When using AutoPlex7, (or any other direct seven segment display controller software) it is extremely important to use a current limiting resistor in your circuit. Failure to do this can and will damage both the microcontroller and display. With a 5V supply, it is advised to use a resistor of at least 270 ohms on the segment pins.
+When using AutoPlex7 (or any other direct seven segment display controller software), it is extremely important to use a current limiting resistor in your circuit. Failure to do this can and will damage both the microcontroller and display. With a 5V supply, it is advised to use a resistor of at least 270 ohms on the segment pins.
 
 ## Setup
 At the top of your sketch, you'll need to set up a few things for the library to work properly. Firstly, we'll need to state that we are using AutoPlex7, like this.
