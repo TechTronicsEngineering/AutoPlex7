@@ -74,7 +74,7 @@ void AutoPlex7::showNumber(int32_t num) {
       wipeDisplay();
     }
 
-void AutoPlex::multiplex() {
+void AutoPlex7::multiplex() {
       static uint8_t currentDigit = 0;
       static uint8_t displayPosition = 0;
       if (buffer[0] == '\0') {
