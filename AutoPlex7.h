@@ -3,38 +3,28 @@
 
 #include <Arduino.h>
 
-#define displayType ON
-#define COMMON_CATHODE HIGH
-#define COMMON_ANODE LOW
-#define OFF !ON
-#define ALL 0
+#define COMMON_CATHODE 1
+#define COMMON_ANODE 0
+#define DISPLAY_REFRESH TIMER1_COMPA_vect
+#define MAX_DIGITS 8 // Defines the maximum number of digits the library can support. You may increase this if you plan to use larger displays
 
-extern int displayType;
-extern int D1, D2, D3, D4;
-extern int A, B, C, D, E, F, G, DP;
-
-class Display {
+class AutoPlex7 {
 private:
-    int digitsToDisplay[4] = {-1,-1,-1,-1};
-    bool decimalFlags[4] = {false,false,false,false};
-    int currentDigit = 0;
-
-    void blankSegments();
-    void activateDigit(int digitIndex);
-    void showDigitSegments(int val);
-
+    uint8_t digitsClass, digitPinsClass[MAX_DIGITS], segmentPinsClass[8];
+    uint8_t A, B, C, D, E, F, G, DP;
+    bool segmentOn, segmentOff;
+    bool digitOn, digitOff;
+    volatile char buffer[(MAX_DIGITS * 2) + 1] = ""; // Create a buffer to hold the contents of the display. Enough space for MAX_DIGITS characters, decimal points, and a null termination
+    size_t filterDecimals(const char* string);
+    void wipeDisplay();
 public:
-    void begin();
-    void blankDigit();
-    void clearDisplay();
-    void showDecimal();
-    void clearDecimal();
-    void testDisplay();
-    void showNumber(int num);
-    void setDigit(int number);
-    void multiplexStep();
+    void begin(bool displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]);
+    void testDisplay(unsigned long ms);
+    void multiplex();
+    void clear();
+    void showNumber(int32_t num);
+    void showNumberF(double num, uint8_t decimalPlaces);
+    void print(const char* text);
 };
-
-extern Display display;
 
 #endif
