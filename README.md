@@ -16,7 +16,7 @@ This can be done one of two ways:
 ##### 1. Through Github
 Locate the large green button labeled "Code" on this repository's homepage. Click it and select "Download ZIP."
 Launch the Arduino IDE and locate the menu labled "Sketch" on the top left. Open it, select "Include library" -> "Add .ZIP library." Navigate to your recent downloads and select AutoPlex7.
-This method ensures you get the latest version of AutoPlex7.
+This method ensures you get the latest version of the library.
 
 ##### 2. Directly from the Arduino IDE
 Open the IDE. Find the icon on the left with the stack of books and hover text "library manager," then click on it. This should open a small menu. Search for "AutoPlex7," and click install.
