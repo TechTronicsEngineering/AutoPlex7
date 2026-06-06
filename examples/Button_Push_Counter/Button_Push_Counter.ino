@@ -1,7 +1,7 @@
 /*
   Button Push Counter
 
-  This sketch will count how many times a button is pressed and show it on a seven segment display.
+  This sketch will count how many times a button is pressed and show it on a four-digit seven segment display.
 
   The circuit:
   - Pushbutton connected between pin 13 (which is pulled high through a 10K resistor) and ground
@@ -26,49 +26,44 @@
 
 #include <AutoPlex7.h>
 
-// Set up the display type and connections
-int displayType = COMMON_ANODE; // Change to "COMMON_CATHODE" if using a common cathode display
-int D1 = 1;
-int D2 = 2;
-int D3 = 3;
-int D4 = 4;
-int A = 5;
-int B = 6;
-int C = 7;
-int D = 8;
-int E = 9;
-int F = 10;
-int G = 11;
-int DP = 12;
+AutoPlex7 display; // Create a display object
 
-const int buttonPin = 13; // Define what pin the button is connected to
+// Enable automatic multiplexing
+ISR(DISPLAY_REFRESH) {
+  display.multiplex();
+}
 
-unsigned long buttonPushCounter = 0; // Counter for the number of button presses
-int buttonState = 0; // Current state of the button
-int lastButtonState = 0; // Previous state of the button
+const byte buttonPin = 13; // The pin the pushbutton is connected to
+
+unsigned int buttonPushCounter = 0; // Counter for the number of button presses
+bool buttonState = 0; // Current state of the button
+bool lastButtonState = 0; // Previous state of the button
 
 void setup() {
-  pinMode(buttonPin, INPUT);  // Set this pin as an input
-  display.begin(); // Activate the display
-  display.testDisplay(); // Show all digits, numbers, and decimals
-  delay(1000); // Wait one second
-  display.clearDisplay(); // Clear the display
+  pinMode(buttonPin, INPUT);  // Set the button pin as an input
+  bool displayType = COMMON_CATHODE; // Change to COMMON_ANODE if using a common anode display
+  byte displayDigits = 4; // The display has 4 digits
+  byte digitPins[] = {1, 2, 3, 4}; // D1, D2, D3, D4
+  byte segmentPins[] = {5, 6, 7, 8, 9, 10, 11, 12}; // A, B, C, D, E, F, G, DP
+
+  display.begin(displayType, displayDigits, digitPins, segmentPins); // Initialize the display
+  display.testDisplay(1000); // Show all digits, numbers, and decimals for one second
 }
 
 void loop() {
   // Watch for button presses
   buttonState = digitalRead(buttonPin);
 
-  if (buttonState != lastButtonState) {
-    if (buttonState == HIGH) {
-      buttonPushCounter++;
+  if (buttonState != lastButtonState) { // If the buttonState changed...
+    if (buttonState) { // If the buttonPun is HIGH...
+      buttonPushCounter++; // Increment the button push variable
     }
-    delay(50);
+    delay(50); // Debounce
   }
 
   lastButtonState = buttonState;
 
-  if (buttonPushCounter == 10000) {
+  if (buttonPushCounter >= 10000) {
     buttonPushCounter = 0; // Reset counter so it doesn’t get too large
   }
 
