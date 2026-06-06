@@ -9,26 +9,39 @@ AutoPlex7 is a simple and versatile Arduino library for controlling seven segmen
 - Works with both common cathode and common anode displays with up to 8 digits (can be easily modified to support over 200)
 - Has a flexible pin layout; letting you connect any display pin to any of Arduino's digital pins
 
-## Warning
-When using AutoPlex7 (or any other direct seven segment display controller software), it is extremely important to use current limiting resistors in your circuit. Failure to do this can and will damage both the microcontroller and display. With a 5V supply, it is advised to use a resistor of at least 270 ohms on the digit pins.
+## How to install
+To use AutoPlex7 in an Arduino sketch, you'll need to install it.
+This can be done one of two ways:
 
-## Setup
-At the top of your sketch, you'll need to configure a few parameters for the library to work properly. First, we'll need to state that we are using AutoPlex7, like this:
+##### 1. Through Github
+Locate the large green button labeled "Code" on this repository's homepage. Click it and select "Download ZIP."
+Launch the Arduino IDE and locate the menu labled "Sketch" on the top left. Open it, select "Include library" -> "Add .ZIP library." Navigate to your recent downloads and select AutoPlex7.
+This method ensures you get the latest version of AutoPlex7.
+
+##### 2. Directly from the Arduino IDE
+Open the IDE. Find the icon on the left with the stack of books and hover text "library manager," then click on it. This should open a small menu. Search for "AutoPlex7," and click install.
+
+Once the library has been succesfully installed, you may proceed.
+
+## Setting up AutoPlex7
+When using AutoPlex7, you'll need to configure a few parameters at the top of your sketch for the library to work properly.
+First, we'll need to state that the program is using AutoPlex7, like this:
 ```C++
 #include <AutoPlex7.h>
 ```
 
-Afterwards, we'll need to create an instance of the AutoPlex7 class. You can name it whatever you like, but in this example, let's call it "MyDisplay."
+Below that, we'll need to create an instance of the AutoPlex7 class. You can name it whatever you like, but in this example, we'll call it "MyDisplay."
 ```C++
 AutoPlex7 MyDisplay;
 ```
 
-Now that we have a display object, we need to enable it's multiplexing. AutoPlex7 utilizes Timer1 to generate an interrupt every millisecond, and when this happens, the library should render the next character on the display. Setting this up is very easy, and takes just three lines of code:
+Now that we have a display object, we need to enable it's automated multiplexing. AutoPlex7 utilizes Timer1 to generate an interrupt every millisecond, and when this happens, the library should render the next character on the display. Setting this up is very easy, and takes just three lines of code:
 ```C++
 ISR(DISPLAY_REFRESH) {
   MyDisplay.multiplex();
 }
 ```
+###### *If you're using more than one display, make sure to call multiplex() on all instances within the ISR.*
 
 Next, you'll need to configure a few settings and initiallize the display. This should be done within setup(). 
 ```C++
@@ -41,7 +54,7 @@ void setup() {
   MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins); // Initiallize the display and pass the parameters to it
 }
 ```
-This will complete the setup process and activate the display. Here's an example of what the beginning of a sketch using AutoPlex7 could look like.
+This will complete the setup process and activate the display. Here's an example of what the beginning of a sketch using AutoPlex7 could look like for a four digit common cathode display.
 ```C++
 #include <AutoPlex7>
 
@@ -60,19 +73,14 @@ void setup() {
   MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins);
 }
 ```
-It's generally recommended that, after calling ```MyDisplay.begin()``` you use the built in display test command to ensure functionality of the display.
+It's generally recommended that, after calling ```begin()``` you use the built in segment test command to ensure functionality of the display.
 ```C++
-display.testDisplay();
+display.testDisplay(1000);
 ```
-This will light up all digits, segments, and decimals.
-After this, you can use ```delay(1000)``` to wait one second, and then clear the display.
-```C++
-display.clearDisplay();
-```
-This turns off all digits, segments, and decimals. The display is ready for use.
+###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired. This is a blocking function.*
 
 ## Commands
-Now that you've initiallized ths display, you can start using it. Let's take a look at the commands you can use to control the screen. We'll start with the most straightforward:
+Now that you've initiallized and tested your display, you can start using it. Let's take a look at the commands you can use to control the screen. We'll start with the most straightforward:
 
 ### Show a number
 ```C++
