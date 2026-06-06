@@ -80,37 +80,96 @@ display.testDisplay(1000);
 ###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired. This is a blocking function.*
 
 ## Commands
-Now that you've initiallized and tested your display, you can start using it. Let's take a look at the commands you can use to control the screen. We'll start with the most straightforward:
+Now that you've initiallized and tested your display, you can start using it. Let's take a look at the functions you can use to control the screen. We'll start with the most straightforward:
 
-### Show a number
+### Writing to the display
+AutoPlex7 features three distinct functions for printing different data types on the display.
+
+###### For integers:
+To show a whole number on the seven segment display, you can call:
 ```C++
-display.showNumber(int number);
+MyDisplay.showNumber(int32_t num);
 ```
-This command simply shows any number you put in the parenthesis on the screen. For example, if you wish to display "1234," you can do this:
+This function shows any integer you pass to it on the display. For example, if you wish to show "1234," you can do this:
 ```C++
-display.showNumber(1234);
+MyDisplay.showNumber(1234);
 ```
-You can also put a variable in the parenthesis.
+However, it does not support decimals, and that's where the next function comes in:
+
+###### Displaying a float
+AutoPlex7 features a separate function for displaying floats/doubles.
 ```C++
-display.showNumber(voltageatpinA5);
+MyDisplay.showNumberF(double num, uint8_t decimalPlacses)
+```
+This special ```setNumberF``` function accepts two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
+
+###### Displaying a string
+The most recent versions of AutoPlex7 also accept string input.
+```C++
+MyDisplay.print(const char* text)
+```
+This is considered the easiest way to manipulate the display, and also the most versatile. It supports many different characters - numbers, decimals, symbols, and all 26 letters (though some are approximations) of the alphabet.
+Using ```print()``` to show something like "Abcd" is as simple as this:
+```C++
+MyDisplay.print("Abcd")
 ```
 
 ### Clearing the display
-From time to time, you'll need to clear the display. That can be done using:
+From time to time, you mignt fudn yourself needing to clear the display. That can be done by sinply calling:
 ```C++
-display.clearDisplay();
+MyDisplay.clear();
 ```
+### Multiplexing
+AutoPlex7 features a built-in
+```C++
+MyDisplay.multiplex()
+```
+function that refreshes the display. It's deisgned to be continuously called from an ISR, but it may be removed from that and multiplexing performed manually if desired.
 
-### Working with decimals
-If you need to show a decimal, you can use these two commands in combination:
+## Using multiple displays
+Recent updates of AutoPlex7 were redesigned to support the use of multiple displays at once.
+Using two displays is almost exactky the same as using one; but just make sure to call multiplex() on all AutoPlex7 instances within the ISR and name paremeter variables differently for each display to prevent compilation errors.
+
+A simple sketch using two displays:
 ```C++
-display.setDigit(// Choose which digit to show the decimal on by typing it's number);
-display.showDecimal():
-```
-To get rid of a decimal:
-```C++
-display.setDigit(// Choose which digit to clear the decimal on by typing it's number);
-display.clearDecimal();
+#include <AutoPlex7.h> // Include the AutoPlex7 library
+
+AutoPlex7 display1; // First display
+AutoPlex7 display2; // Second display
+
+ISR(DISPLAY_REFRESH) {
+  // Multiplex both displays
+  display1.multiplex();
+  display2.multiplex();
+}
+
+void setup() {
+  // Assuming display1 is a 4-digit common cathode...
+  bool displayType1 = COMMON_CATHODE;
+  byte displayDigits1 = 4;
+  byte digitPins1[] = {1, 2, 3, 4};
+  byte segmentPins1[] = {5, 6, 7, 8, 9, 10, 11, 12};
+  display1.begin(displayType1, displayDigits1, digitPins1, segmentPins1);
+
+  // Assuming display2 is a two-digit common anode...
+  bool displayType2 = COMMON_ANODE;
+  byte displayDigits2 = 2;
+  byte digitPins2[] = {13, 14};
+  byte segmentPins2[] = {15, 16, 17, 18, 19, 20, 21, 22};
+  display2.begin(displayType2, displayDigits2, digitPins2, segmentPins2);
+
+  // Segment test the displays. Must be done manually with two displays; if you wish them to test simultaneously.
+  display1.print("8.8.8.8.");
+  display2.print("8.8.");
+  delay(1000); // 1 second segment test
+  display1.clear();
+  display2.clear();
+}
+
+void loop() {
+  display1.showNumber(1234);
+  display2.print("HI.");
+}
 ```
 
 ## Copyright Notice
