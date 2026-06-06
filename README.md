@@ -115,7 +115,7 @@ MyDisplay.print("Abcd")
 ```
 
 ### Clearing the display
-From time to time, you mignt fudn yourself needing to clear the display. That can be done by sinply calling:
+From time to time, you mignt find yourself needing to clear the display. That can be done by sinply calling:
 ```C++
 MyDisplay.clear();
 ```
@@ -128,7 +128,7 @@ function that refreshes the display. It's deisgned to be continuously called fro
 
 ## Using multiple displays
 Recent updates of AutoPlex7 were redesigned to support the use of multiple displays at once.
-Using two displays is almost exactky the same as using one; but just make sure to call multiplex() on all AutoPlex7 instances within the ISR and name paremeter variables differently for each display to prevent compilation errors.
+Using two displays is almost exactly the same as using one; but just make sure to call multiplex() on all AutoPlex7 instances within the ISR and name parameter variables differently for each display to prevent compilation errors.
 
 A simple sketch using two displays:
 ```C++
