@@ -15,13 +15,13 @@ This can be done one of two ways:
 
 ##### 1. Through Github
 Locate the large green button labeled "Code" on this repository's homepage. Click it and select "Download ZIP."
-Launch the Arduino IDE and locate the menu labled "Sketch" on the top left. Open it, select "Include library" -> "Add .ZIP library." Navigate to your recent downloads and select AutoPlex7.
+Launch the Arduino IDE and locate the menu labelled "Sketch" on the top left. Open it, select "Include library" -> "Add .ZIP library." Navigate to your recent downloads and select AutoPlex7.
 This method ensures you get the latest version of the library.
 
 ##### 2. Directly from the Arduino IDE
 Open the IDE. Find the icon on the left with the stack of books and hover text "library manager," then click on it. This should open a small menu. Search for "AutoPlex7," and click install.
 
-Once the library has been succesfully installed, you may proceed.
+Once the library has been successfully installed, you may proceed.
 
 ## Setting up AutoPlex7
 When using AutoPlex7, you'll need to configure a few parameters at the top of your sketch for the library to work properly.
@@ -35,7 +35,7 @@ Below that, we'll need to create an instance of the AutoPlex7 class. You can nam
 AutoPlex7 MyDisplay;
 ```
 
-Now that we have a display object, we need to enable it's automated multiplexing. AutoPlex7 utilizes Timer1 to generate an interrupt every millisecond, and when this happens, the library should render the next character on the display. Setting this up is very easy, and takes just three lines of code:
+Now that we have a display object, we need to enable its automated multiplexing. AutoPlex7 utilizes Timer1 to generate an interrupt every millisecond, and when this happens, the library should render the next character on the display. Setting this up is very easy, and takes just three lines of code:
 ```C++
 ISR(DISPLAY_REFRESH) {
   MyDisplay.multiplex();
@@ -44,7 +44,7 @@ ISR(DISPLAY_REFRESH) {
 ###### *DISPLAY_REFRESH is defined by the library as "TIMER1_COMPA_vect"*
 ###### *If you're using more than one display, make sure to call multiplex() on all instances within the ISR.*
 
-Next, you'll need to configure a few settings and initiallize the display. This should be done within setup(). 
+Next, you'll need to configure a few settings and initialize the display. This should be done within setup(). 
 ```C++
 void setup() {
   bool displayType = /* Select either "COMMON_CATHODE" or "COMMON_ANODE" */;
@@ -52,7 +52,7 @@ void setup() {
   byte digitPins[] = { /* D1, D2, D3... */ }; // Replace with your desired pin numbers
   byte segmentPins[] = { /* A, B, C, D, E, F, G, DP */ }; // Replace with your desired pin numbers
 
-  MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins); // Initiallize the display and pass the parameters to it
+  MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins); // Initialize the display and pass the parameters to it
 }
 ```
 This will complete the setup process and activate the display. Here's an example of what the beginning of a sketch using AutoPlex7 could look like for a four digit common cathode display.
