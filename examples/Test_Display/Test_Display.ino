@@ -117,10 +117,11 @@ void setup() {
   display.testDisplay(1000); // Show all digits, numbers, and decimals for one second
 
   hello();
-  intoduceAutoPlex7();
+  introduceAutoPlex7();
 }
 
 void loop() {
+  // Render dots across the display
   display.print(" .   ");
   delay(250);
   display.print(" . .  ");
@@ -129,6 +130,8 @@ void loop() {
   delay(250);
   display.print(" . . . .");
   delay(250);
+
+  // Showcase numbers on the display
   display.showNumber(1234); // Display "1234"
   delay(1000); // Wait one second
   display.showNumber(2345); // Show the next number "2345"
@@ -143,8 +146,9 @@ void loop() {
   delay(100);
   display.showNumber(7890);
   delay(1000);
-  display.clearDisplay();
+  display.clear();
 
+  // Slide dashes across display
   display.print("   -");
   delay(250);
   display.print("  --");
@@ -160,6 +164,7 @@ void loop() {
   display.print("   -");
   delay(250);
 
+  // Showcase the alphabetical display
   display.print("Abcd");
   delay(250);
   display.print("EFGH");
@@ -175,6 +180,6 @@ void loop() {
   display.print(" YZ ");
   delay(500);
   
-  display.clearDisplay(); // Clear the display
+  display.clear(); // Clear the display
   delay(500);
 }
