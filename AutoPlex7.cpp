@@ -72,7 +72,7 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
       interrupts();
     }
     void AutoPlex7::testDisplay(unsigned long ms) { // Segment test
-      print("8.8.8.8.");
+      print("8.8.8.8.8.8.8.8.");
       delay(ms);
     }
     void AutoPlex7::clear() { // Empty the display buffer and deactivate all digits and segments
