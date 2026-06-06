@@ -101,7 +101,7 @@ AutoPlex7 features a separate function for displaying floats/doubles.
 ```C++
 MyDisplay.showNumberF(double num, uint8_t decimalPlacses)
 ```
-This special ```setNumberF``` function accepts two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
+This special ```showNumberF``` function accepts two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
 
 ###### Displaying a string
 The most recent versions of AutoPlex7 also accept string input.
