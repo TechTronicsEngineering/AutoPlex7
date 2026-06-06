@@ -89,11 +89,11 @@ AutoPlex7 features three distinct functions for printing different data types on
 ###### For integers:
 To show a whole number on the seven segment display, you can call:
 ```C++
-MyDisplay.showNumber(int32_t num);
+MyDisplay.showNumber(int32_t num)
 ```
 This function shows any integer you pass to it on the display. For example, if you wish to show "1234," you can do this:
 ```C++
-MyDisplay.showNumber(1234);
+MyDisplay.showNumber(1234)
 ```
 However, it does not support decimals, and that's where the next function comes in:
 
@@ -118,14 +118,27 @@ MyDisplay.print("Abcd")
 ### Clearing the display
 From time to time, you might find yourself needing to clear the display. That can be done by sinply calling:
 ```C++
-MyDisplay.clear();
+MyDisplay.clear()
 ```
+
+### Appennding characters to the display
+The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending characters may performed using the method:
+```C++
+MyDisplay.append(const char* text)
+```
+For instance, if you want to append "°C" to the display:
+```C++
+MyDisplay.append("*C") // "*" is displayed as "°"
+```
+However, it is strongly discouraged to use this method with automated multiplexing. Should you choose to, you may notice potent flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts.
+If you must use the ```append()``` function, you will need to remove the ```multiplex``` call from ```ISR(DISPLAY_REFRESH)``` and call it within loop. Be aware that this will mandate non-blocking code.
+
 ### Multiplexing
 AutoPlex7 features a built-in
 ```C++
 MyDisplay.multiplex()
 ```
-function that refreshes the display. It's deisgned to be continuously called from an ISR, but it may be removed from that and multiplexing performed manually if desired.
+function that refreshes the display. It's deisgned to be continuously called from an ISR, but it may be removed from that and multiplexing performed manually if required.
 
 ## Using multiple displays
 Recent updates of AutoPlex7 were redesigned to support the use of multiple displays at once.
