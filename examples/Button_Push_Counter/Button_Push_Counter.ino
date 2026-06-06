@@ -14,9 +14,9 @@
   - Display pin G -> Arduino digital pin 11
   - Display pin DP -> Arduino digital pin 12
   - Display Digit pin 1 -> 270Ω -> Arduino pin 1
-  - Display Digit pin 2 -> 270Ω -> Arduino pin 2 (if you don't have two digits, just leave pin 2 unused)
-  - Display Digit pin 3 -> 270Ω -> Arduino pin 3 (if you don't have three digits, just leave pin 3 unused)
-  - Display Digit pin 4 -> 270Ω -> Arduino pin 4 (if you don't have four digits, just leave pin 4 unused)
+  - Display Digit pin 2 -> 270Ω -> Arduino pin 2
+  - Display Digit pin 3 -> 270Ω -> Arduino pin 3
+  - Display Digit pin 4 -> 270Ω -> Arduino pin 4
 
   created 10/12/2025
   by Nyjah
