@@ -1,23 +1,21 @@
 /*
   Timer
 
-  This sketch is an adjustable timer (0-10 seconds) that displays how many seconds it has been since the timer was started.
+  This sketch is an adjustable timer (0-10 seconds) that shows how many seconds it has been since the timer was started on a two-digit seven segment display.
   To use it: set the length of the timer by turning the potentiometer. The set duration will appear on the screen. To start the timer, simply press the pushbutton.
   When the timer ends, the display will blink four times and then be ready for the next timer.
 
   The circuit:
-  - Display pin A -> Arduino digital pin 5
-  - Display pin B -> Arduino digital pin 6
-  - Display pin C -> Arduino digital pin 7
-  - Display pin D -> Arduino digital pin 8
-  - Display pin E -> Arduino digital pin 9
-  - Display pin F -> Arduino digital pin 10
-  - Display pin G -> Arduino digital pin 11
-  - Display pin DP -> Arduino digital pin 12
+  - Display pin A -> Arduino digital pin 3
+  - Display pin B -> Arduino digital pin 4
+  - Display pin C -> Arduino digital pin 5
+  - Display pin D -> Arduino digital pin 6
+  - Display pin E -> Arduino digital pin 7
+  - Display pin F -> Arduino digital pin 8
+  - Display pin G -> Arduino digital pin 9
+  - Display pin DP -> Arduino digital pin 10
   - Display digit pin 1 -> 270Ω -> Arduino pin 1
   - Display digit pin 2 -> 270Ω -> Arduino pin 2
-  - Display digit pin 3 -> 270Ω -> Arduino pin 3
-  - Display digit pin 4 -> 270Ω -> Arduino pin 4
 
   - GND -> pushbutton -> Arduino pin 13 -> 10KΩ -> VCC
 
@@ -33,35 +31,30 @@
 
 #include <AutoPlex7.h>
 
-// Set up display
-int displayType = COMMON_ANODE; // Change to "COMMON_CATHODE" if using a common cathode display
-int D1 = 1;
-int D2 = 2;
-int D3 = 3;
-int D4 = 4;
-int A = 5;
-int B = 6;
-int C = 7;
-int D = 8;
-int E = 9;
-int F = 10;
-int G = 11;
-int DP = 12;
+AutoPlex7 display; // Create a display object
+
+// Enable automatic multiplexing
+ISR(DISPLAY_REFRESH) {
+  display.multiplex();
+}
 
 // Create variables
 unsigned long previousMillis = 0;
-const long interval = 1000;
-long seconds = 0;
-int buttonState = 0;
-int timing = 0;
+const unsigned long interval = 1000;
+unsigned long seconds = 0;
+bool buttonState = 0;
+bool timing = 0;
 
 void setup() {
   pinMode(13, INPUT_PULLUP); // Set the pin the pushbutton is connected to as an input
+  
+  bool displayType = COMMON_CATHODE; // Change to COMMON_ANODE if using a common anode display
+  byte displayDigits = 2; // The display has 2 digits
+  byte digitPins[] = {1, 2}; // D1, D2
+  byte segmentPins[] = {3, 4, 5, 6, 7, 8, 9, 10}; // A, B, C, D, E, F, G, DP
 
-  display.begin(); // Initialize the display
-  display.testDisplay(); // Run test to ensure display functionality
-  delay(1000); // Wait one second
-  display.clearDisplay(); // Clear the display
+  display.begin(displayType, displayDigits, digitPins, segmentPins); // Initialize the display
+  display.testDisplay(1000); // Show all digits, numbers, and decimals for one second
 }
 
 void loop() {
@@ -73,12 +66,12 @@ void loop() {
   display.showNumber(timer); // Display the current set timer duration
 
   // Check if button is pressed
-  if (buttonState == HIGH) {
+  if (buttonState) {
     timing = 1; // Activate the timer
   }
 
   // Check if timer should be counting
-  if (timing == 1) {
+  if (timing) {
     if (currentMillis - previousMillis >= interval) {
       // Save the last time the counter was updated
       previousMillis = currentMillis;
