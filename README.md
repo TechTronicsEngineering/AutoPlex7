@@ -116,7 +116,7 @@ MyDisplay.print("Abcd")
 ```
 
 ### Clearing the display
-From time to time, you mignt find yourself needing to clear the display. That can be done by sinply calling:
+From time to time, you might find yourself needing to clear the display. That can be done by sinply calling:
 ```C++
 MyDisplay.clear();
 ```
