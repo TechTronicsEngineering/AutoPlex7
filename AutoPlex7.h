@@ -6,7 +6,7 @@
 #define COMMON_CATHODE 1
 #define COMMON_ANODE 0
 #define DISPLAY_REFRESH TIMER1_COMPA_vect
-#define MAX_DIGITS 8 // Defines the maximum number of digits the library can support. You may increase this if you plan to use larger displays
+#define MAX_DIGITS 8 // Defines the maximum number of digits the library can support. You may increase this if you plan to use larger displays, at the cost of more memory usage
 
 class AutoPlex7 {
 private:
@@ -14,7 +14,7 @@ private:
     uint8_t A, B, C, D, E, F, G, DP;
     bool segmentOn, segmentOff;
     bool digitOn, digitOff;
-    volatile char buffer[(MAX_DIGITS * 2) + 1] = ""; // Create a buffer to hold the contents of the display. Enough space for MAX_DIGITS characters, decimal points, and a null termination
+    volatile char buffer[(MAX_DIGITS * 2) + 1] = ""; // Buffer to hold the contents of the display. Enough space for MAX_DIGITS characters, decimal points, and a null termination
     size_t filterDecimals(const char* string);
     void wipeDisplay();
 public:
