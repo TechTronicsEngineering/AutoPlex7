@@ -56,7 +56,7 @@ void setup() {
 ```
 This will complete the setup process and activate the display. Here's an example of what the beginning of a sketch using AutoPlex7 could look like for a four digit common cathode display.
 ```C++
-#include <AutoPlex7>
+#include <AutoPlex7.h>
 
 AutoPlex7 MyDisplay;
 
