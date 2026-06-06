@@ -57,7 +57,7 @@ void introduceAutoPlex7() {
   // Write an animation that explains AutoPlex7 on the display
   display.print("I AM");
   delay(400);
-  display.print("  A");
+  display.print("   A");
   delay(400);
   display.print("7SEG");
   delay(400);
@@ -97,11 +97,11 @@ void introduceAutoPlex7() {
   delay(250);
   display.clear();
   delay(250);
-  display.print(" to ");
+  display.print("  to");
   delay(400);
   display.print("ctrL.");
   delay(400);
-  display.print(" ME ");
+  display.print("  ME");
   delay(400);
   display.clear();
   delay(100);
