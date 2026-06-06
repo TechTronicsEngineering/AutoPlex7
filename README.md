@@ -1,75 +1,66 @@
 # AutoPlex7
 ### Control seven segment displays with ease.
 
-AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to four digits. Unlike many other libraries for this purpose, AutoPlex7 automatically multipexes itself using Timer2. This means no calls to refresh the display; enabling AutoPlex7 to work with delays in your code.
+AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to eight digits. Unlike many other libraries for this purpose, AutoPlex7 automaticallyhandles multiplexing in the background using Timer1. This means no calls to refresh the display; enabling AutoPlex7 to work with delays or other blocking functions in your code.
 
 ## Features
 - Automatic multiplexing
 - Built to work with delays in your code
-- Works with both common cathode and common anode displays
+- Works with both common cathode and common anode displays with up to 8 digits (can be easily modified to support over 200)
 - Has a flexible pin layout; letting you connect any display pin to any of Arduino's digital pins
-- Built-in, global "display" object
 
 ## Warning
-When using AutoPlex7 (or any other direct seven segment display controller software), it is extremely important to use a current limiting resistor in your circuit. Failure to do this can and will damage both the microcontroller and display. With a 5V supply, it is advised to use a resistor of at least 270 ohms on the digit pins.
+When using AutoPlex7 (or any other direct seven segment display controller software), it is extremely important to use current limiting resistors in your circuit. Failure to do this can and will damage both the microcontroller and display. With a 5V supply, it is advised to use a resistor of at least 270 ohms on the digit pins.
 
 ## Setup
-At the top of your sketch, you'll need to set up a few things for the library to work properly. Firstly, we'll need to state that we are using AutoPlex7, like this.
+At the top of your sketch, you'll need to configure a few parameters for the library to work properly. First, we'll need to state that we are using AutoPlex7, like this:
 ```C++
 #include <AutoPlex7.h>
 ```
-Next, let's define a few paremeters. Right under the last line of code, you can tell the Arduino what type of display you're using, like this:
-```C++
-int displayType = COMMON_ANODE;
-```
-If you're using a common cathode display, just replace "COMMON_ANODE" with "COMMON_CATHODE."
 
-Now, we'll define the digital pins your seven segment display is connected to. We'll start with the digit pins.
+Afterwards, we'll need to create an instance of the AutoPlex7 class. You can name it whatever you like, but in this example, let's call it "MyDisplay."
 ```C++
-int D1 = // Type the digital pin D1 is connected to here;
-int D2 = // Type the digital pin D2 is connected to here;
-int D3 = // Type the digital pin D3 is connected to here;
-int D4 = // Type the digital pin D4 is connected to here;
-```
-**IMPOTANT NOTE:** Even if your display does not have four digits, you'll still need to define the pins for the digits you don't have. Just leave these pins unconnected. For instance, if you use a two digit display, you could write that D1 is connnected to pin 1, D2 to 2, D3 to 3, and D4 is 4. You would wire it so that D1 connects to pin 3, and D2 to pin 4. Leave pins 1 and 2 unused.
-(Essentially, just wire it so that the largest pin number is connected to the same pin in the code as it is in the circuit, and connect each pin moving backwards from there.)
-
-Next, we'll define what Arduino pins the display's segment pins are connected to.
-```C++
-int A = // Type the digital pin A is connected to here;
-int B = // Type the digital pin B is connected to here;
-int C = // Type the digital pin C is connected to here;
-int D = // Type the digital pin D is connected to here;
-int E = // Type the digital pin E is connected to here;
-int F = // Type the digital pin F is connected to here;
-int G = // Type the digital pin G is connected to here;
-int DP = // Type the digital pin the decimal point is connected to here;
-```
-That's it for the paremeters we have to define! Here's an example of what the beginning of a sketch using AutoPlex7 could look like.
-```C++
-#include <AutoPlex7.h>
-
-int displayType = COMMON_CATHODE;
-int D1 = 1;
-int D2 = 2;
-int D3 = 3;
-int D4 = 4;
-int A = 5;
-int B = 6;
-int C = 7;
-int D = 8;
-int E = 9;
-int F = 10;
-int G = 11;
-int DP = 12;
+AutoPlex7 MyDisplay;
 ```
 
-After you're done setting up the paremeters, you'll need to initiallize the seven segment display in ```setup()```. This can be done by calling:
+Now that we have a display object, we need to enable it's multiplexing. AutoPlex7 utilizes Timer1 to generate an interrupt every millisecond, and when this happens, the library should render the next character on the display. Setting this up is very easy, and takes just three lines of code:
 ```C++
-display.begin();
+ISR(DISPLAY_REFRESH) {
+  MyDisplay.multiplex();
+}
 ```
-This will complete the setup process and activate the display.
-It's generally recommended that, after calling ```display.begin()``` you use the built in display test command to ensure functionality of the display.
+
+Next, you'll need to configure a few settings and initiallize the display. This should be done within setup(). 
+```C++
+void setup() {
+  bool displayType = /* Select either "COMMON_CATHODE" or "COMMON_ANODE" */;
+  byte displayDigits = /* Replace this comment with the number of digits your display has */;
+  byte digitPins[] = { /* D1, D2, D3... */ }; // Replace with your desired pin numbers
+  byte segmentPins[] = { /* A, B, C, D, E, F, G, DP */ }; // Replace with your desired pin numbers
+
+  MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins); // Initiallize the display and pass the parameters to it
+}
+```
+This will complete the setup process and activate the display. Here's an example of what the beginning of a sketch using AutoPlex7 could look like.
+```C++
+#include <AutoPlex7>
+
+AutoPlex7 MyDisplay;
+
+ISR(DISPLAY_REFRESH) {
+  MyDisplay.multiplex();
+}
+
+void setup() {
+  bool displayType = COMMON_CATHODE;
+  byte displayDigits = 4;
+  byte digitPins[] = {1, 2, 3, 4};
+  byte segmentPins[] = {5, 6, 7, 8, 9, 10, 11, 12};
+
+  MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins);
+}
+```
+It's generally recommended that, after calling ```MyDisplay.begin()``` you use the built in display test command to ensure functionality of the display.
 ```C++
 display.testDisplay();
 ```
