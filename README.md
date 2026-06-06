@@ -81,7 +81,7 @@ display.testDisplay(1000);
 ###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired. This is a blocking function.*
 
 ## Commands
-Now that you've initiallized and tested your display, you can start using it. Let's take a look at the functions you can use to control the screen. We'll start with the most straightforward:
+Now that you've initialized and tested your display, you can start using it. Let's take a look at the functions you can use to control the screen. We'll start with the most straightforward:
 
 ### Writing to the display
 AutoPlex7 features three distinct functions for printing different data types on the display.
@@ -100,7 +100,7 @@ However, it does not support decimals, and that's where the next function comes 
 ###### Displaying a float
 AutoPlex7 features a separate function for displaying floats/doubles.
 ```C++
-MyDisplay.showNumberF(double num, uint8_t decimalPlacses)
+MyDisplay.showNumberF(double num, uint8_t decimalPlaces)
 ```
 This special ```showNumberF``` function accepts two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
 
@@ -116,12 +116,12 @@ MyDisplay.print("Abcd")
 ```
 
 ### Clearing the display
-From time to time, you might find yourself needing to clear the display. That can be done by sinply calling:
+From time to time, you might find yourself needing to clear the display. That can be done by simply calling:
 ```C++
 MyDisplay.clear()
 ```
 
-### Appennding characters to the display
+### Appending characters to the display
 The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending characters may performed using the method:
 ```C++
 MyDisplay.append(const char* text)
@@ -131,14 +131,14 @@ For instance, if you want to append "°C" to the display:
 MyDisplay.append("*C") // "*" is displayed as "°"
 ```
 However, it is strongly discouraged to use this method with automated multiplexing. Should you choose to, you may notice potent flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts.
-If you must use the ```append()``` function, you will need to remove the ```multiplex``` call from ```ISR(DISPLAY_REFRESH)``` and call it within loop. Be aware that this will mandate non-blocking code.
+If you must use the ```append()``` function, you will need to remove the ```multiplex``` call from ```ISR(DISPLAY_REFRESH)``` and call it within ```loop()```. Be aware that this will mandate non-blocking code.
 
 ### Multiplexing
 AutoPlex7 features a built-in
 ```C++
 MyDisplay.multiplex()
 ```
-function that refreshes the display. It's deisgned to be continuously called from an ISR, but it may be removed from that and multiplexing performed manually if required.
+function that refreshes the display. It's designed to be continuously called from an ISR, but it may be removed from that and multiplexing performed manually if required.
 
 ## Using multiple displays
 Recent updates of AutoPlex7 were redesigned to support the use of multiple displays at once.
