@@ -41,7 +41,7 @@ ISR(DISPLAY_REFRESH) {
   MyDisplay.multiplex();
 }
 ```
-###### *DISPLAY_REFRESH is defined by tge library as "TIMER1_COMPA_vect"
+###### *DISPLAY_REFRESH is defined by the library as "TIMER1_COMPA_vect"
 ###### *If you're using more than one display, make sure to call multiplex() on all instances within the ISR.*
 
 Next, you'll need to configure a few settings and initiallize the display. This should be done within setup(). 
