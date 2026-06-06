@@ -21,6 +21,7 @@ public:
     void begin(bool displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]);
     void testDisplay(unsigned long ms);
     void multiplex();
+    void append(const char* text);
     void clear();
     void showNumber(int32_t num);
     void showNumberF(double num, uint8_t decimalPlaces);
