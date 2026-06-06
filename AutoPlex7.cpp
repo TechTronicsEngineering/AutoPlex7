@@ -79,6 +79,19 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
       buffer[0] = '\0';
       wipeDisplay();
     }
+    void AutoPlex7::append(const char* text) { // Add a suffix to the current display contents
+      noInterrupts();
+
+      if (strlen(buffer) + strlen(text) + 1 > (MAX_DIGITS * 2)) { return; } // Don't add suffix if the current contents + suffix contain more characters than the library supports
+
+      uint8_t i = 0;
+      while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
+      for (uint8_t u = 0; text[u] != '\0'; u++) { // Add the suffix
+        buffer[i++] = text[u];
+      }
+      buffer[i] = '\0'; // Terminate string
+      interrupts();
+    }
 
 void AutoPlex7::multiplex() { // Render the buffer onto the screen
       static uint8_t currentDigit = 0; // The character within the buffer which the multiplexing logic is currently on
