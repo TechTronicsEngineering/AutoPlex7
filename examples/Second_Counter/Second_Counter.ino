@@ -1,7 +1,7 @@
 /*
   Second Counter
 
-  This sketch will count seconds since the last reset on a seven segment display.
+  This sketch will count seconds since the last reset on a four-digit seven segment display.
 
   The circuit:
   - Display pin A -> Arduino digital pin 5
@@ -13,9 +13,9 @@
   - Display pin G -> Arduino digital pin 11
   - Display pin DP -> Arduino digital pin 12
   - Display Digit pin 1 -> 270Ω -> Arduino pin 1
-  - Display Digit pin 2 -> 270Ω -> Arduino pin 2 (if you don't have two digits, just leave pin 2 unused)
-  - Display Digit pin 3 -> 270Ω -> Arduino pin 3 (if you don't have three digits, just leave pin 3 unused)
-  - Display Digit pin 4 -> 270Ω -> Arduino pin 4 (if you don't have four digits, just leave pin 4 unused)
+  - Display Digit pin 2 -> 270Ω -> Arduino pin 2
+  - Display Digit pin 3 -> 270Ω -> Arduino pin 3
+  - Display Digit pin 4 -> 270Ω -> Arduino pin 4
 
   created 10/12/2025
   by Nyjah
@@ -25,29 +25,24 @@
 
 #include <AutoPlex7.h>
 
-// Set up display
-int displayType = COMMON_ANODE; // Change to "COMMON_CATHODE" if using a common cathode display
-int D1 = 1;
-int D2 = 2;
-int D3 = 3;
-int D4 = 4;
-int A = 5;
-int B = 6;
-int C = 7;
-int D = 8;
-int E = 9;
-int F = 10;
-int G = 11;
-int DP = 12;
+AutoPlex7 display; // Create a display object
+
+// Enable automatic multiplexing
+ISR(DISPLAY_REFRESH) {
+  display.multiplex();
+}
 
 // Create counter variable
 unsigned long seconds = 0;
 
 void setup() {
-  display.begin(); // Initialize the display
-  display.testDisplay(); // Run test to ensure functionality
-  delay(1000); // Wait one second
-  display.clearDisplay(); // Clear the display
+  bool displayType = COMMON_CATHODE; // Change to COMMON_ANODE if using a common anode display
+  byte displayDigits = 4; // The display has 4 digits
+  byte digitPins[] = {1, 2, 3, 4}; // D1, D2, D3, D4
+  byte segmentPins[] = {5, 6, 7, 8, 9, 10, 11, 12}; // A, B, C, D, E, F, G, DP
+
+  display.begin(displayType, displayDigits, digitPins, segmentPins); // Initialize the display
+  display.testDisplay(1000); // Show all digits, numbers, and decimals for one second
 }
 
 void loop() {
