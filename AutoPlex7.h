@@ -14,6 +14,8 @@ private:
     uint8_t A, B, C, D, E, F, G, DP;
     bool segmentOn, segmentOff;
     bool digitOn, digitOff;
+    volatile uint8_t currentDigit = 0; // The character within the buffer which the multiplexing logic is currently on
+    volatile uint8_t displayPosition = 0; // The physical position of the current character on the display
     volatile char buffer[(MAX_DIGITS * 2) + 1] = ""; // Buffer to hold the contents of the display. Enough space for MAX_DIGITS characters, decimal points, and a null termination
     size_t filterDecimals(const char* string);
     void wipeDisplay();
