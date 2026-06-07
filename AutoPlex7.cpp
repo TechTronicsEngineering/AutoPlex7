@@ -94,8 +94,6 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
     }
 
 void AutoPlex7::multiplex() { // Render the buffer onto the screen
-      static uint8_t currentDigit = 0; // The character within the buffer which the multiplexing logic is currently on
-      static uint8_t displayPosition = 0; // The physical position of the current character on the display
       if (buffer[0] == '\0') { // If string empty...
         wipeDisplay(); // Disable all digits and segments on the display
         return; // Do nothing else, return
