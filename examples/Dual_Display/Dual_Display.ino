@@ -33,7 +33,7 @@
   - Display2 Digit pin 2 -> 270Ω -> Arduino pin 15
   - Display2 Digit pin 3 -> 270Ω -> Arduino pin 16
 
-  created 10/12/2025
+  created 6/7/2026
   by Nyjah
 
   This example sketch is in the public domain.
