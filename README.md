@@ -130,7 +130,7 @@ For instance, if you want to append "°C" to the display:
 ```C++
 MyDisplay.append("*C") // "*" is displayed as "°"
 ```
-However, it is stronmgly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice potent flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts.
+However, it is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts.
 If you need to use the ```append()``` function often, it's best to remove the ```multiplex``` call from ```ISR(DISPLAY_REFRESH)``` and call it within ```loop()```. Be aware that this will mandate non-blocking code.
 
 ### Multiplexing
