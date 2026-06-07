@@ -69,6 +69,6 @@ void loop() {
   unsigned long seconds = millis() / 1000; // Calculate the whole number of seconds
   unsigned long fraction = millis() % 1000; // Calculate the number after the decimal
   SecondsDisplay.showNumber(seconds); // Show the number of elapsed seconds on the first display
-  Seconds.append("."); // Append a decimal to highlight that the next display shows the numbers after the dot. Be careful with the append() function and auto-multiplexing. It may cause flicker if used heavily. Used sparingly, as shown, is okay
+  SecondsDisplay.append("."); // Append a decimal to highlight that the next display shows the numbers after the dot. Be careful with the append() function and auto-multiplexing. It may cause flicker if used heavily. Used sparingly, as shown, is okay
   FractionalDisplay.showNumber(fraction); // Show the numbers after the decimal on the 2nd display
 }
