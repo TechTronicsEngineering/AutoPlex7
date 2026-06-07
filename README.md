@@ -122,7 +122,7 @@ MyDisplay.clear()
 ```
 
 ### Appending characters to the display
-The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending characters may performed using the method:
+The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending characters may be performed using the method:
 ```C++
 MyDisplay.append(const char* text)
 ```
