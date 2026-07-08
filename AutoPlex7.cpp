@@ -1,10 +1,12 @@
 #include "AutoPlex7.h"
 
-void AutoPlex7::begin(bool displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]) {
+void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]) {
     // Decide based on the type of display what "on" represents
     switch (displayType) {
       case COMMON_ANODE: segmentOn = LOW; digitOn = HIGH; break;
       case COMMON_CATHODE: segmentOn = HIGH; digitOn = LOW; break;
+      case CAWDDT: segmentOn = LOW; digitOn = LOW; break;
+      case CCWDDT: segmentOn = HIGH; digitOn = HIGH; break;
     }
     // Define "off" as the inverse of "on"
     segmentOff = !segmentOn;
