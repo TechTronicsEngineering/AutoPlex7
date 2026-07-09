@@ -186,6 +186,16 @@ void loop() {
 }
 ```
 
+## Using transistor drivers for improved brightness
+AutoPlex7 can also run displays that use transistor drivers on the digit pins, a technique used to prouduce higher, more even brightness. When you initialize the display, simply swap displayType for a byte, as opposed to a bool, and set it to either CCWDDT (**C**ommon **C**athode **W**ith **D**igit **D**rive **T**ransistors) or CAWDDT (**C**ommon **A**node **W**ith **D**igit **D**rive **T**ransistors)
+###### Note that common anode displays will require PNP transistor drivers, whereas common cathodes need NPN drivers.
+```C++
+void setup() {
+  byte displayType = CCWDDT; // Change to CAWDDT if using a common anode display
+  ...
+}
+```
+
 ## Copyright Notice
 MIT License
 
