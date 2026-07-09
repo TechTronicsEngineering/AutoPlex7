@@ -84,13 +84,15 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
       delay(ms);
     }
     void AutoPlex7::clear() { // Empty the display buffer and deactivate all digits and segments
+      noInterrupts();
       buffer[0] = '\0';
+      interrupts();
       wipeDisplay();
     }
     void AutoPlex7::append(const char* text) { // Add a suffix to the current display contents
       noInterrupts();
 
-      if (strlen(buffer) + strlen(text) + 1 > (MAX_DIGITS * 2)) { return; } // Don't add suffix if the current contents + suffix contain more characters than the library supports
+      if (strlen(buffer) + strlen(text) + 1 > (MAX_DIGITS * 2)) { interrupts(); return; } // Don't add suffix if the current contents + suffix contain more characters than the library supports
 
       uint8_t i = 0;
       while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
