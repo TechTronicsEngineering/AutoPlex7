@@ -76,7 +76,7 @@ void setup() {
 ```
 It's generally recommended that, after calling ```begin()``` you use the built in segment test command to ensure functionality of the display.
 ```C++
-display.testDisplay(1000);
+MyDisplay.testDisplay(1000);
 ```
 ###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired. This is a blocking function.*
 
