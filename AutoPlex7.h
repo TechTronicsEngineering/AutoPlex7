@@ -22,7 +22,7 @@ private:
     size_t filterDecimals(const char* string);
     void wipeDisplay();
 public:
-    void begin(bool displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]);
+    void begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]);
     void testDisplay(unsigned long ms);
     void multiplex();
     void append(const char* text);
