@@ -118,8 +118,8 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
 
       uint8_t i = 0;
       while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
-      for (uint8_t u = 0; text[u] != '\0'; u++) { // Add the suffix
-        buffer[i++] = text[u];
+      for (uint8_t u = 0; string[u] != '\0'; u++) { // Add the suffix
+        buffer[i++] = string[u];
       }
       buffer[i] = '\0'; // Terminate string
       interrupts();
@@ -134,8 +134,8 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
 
       uint8_t i = 0;
       while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
-      for (uint8_t u = 0; text[u] != '\0'; u++) { // Add the suffix
-        buffer[i++] = text[u];
+      for (uint8_t u = 0; string[u] != '\0'; u++) { // Add the suffix
+        buffer[i++] = string[u];
       }
       buffer[i] = '\0'; // Terminate string
       interrupts();
