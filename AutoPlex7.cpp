@@ -73,6 +73,12 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
       if (strlen(text) > MAX_DIGITS) { buffer[0] = '\0'; } else { strcpy(buffer, text); }
       interrupts();
     }
+    void AutoPlex7::print(int32_t num) {
+      showNumber(num);
+    }
+    void AutoPlex7::print(double num, uint8_t decimalPlaces) {
+      showNumberF(num, decimalPlaces);
+    }
     void AutoPlex7::testDisplay(unsigned long ms) { // Segment test
       uint8_t position = 0;
       noInterrupts();
@@ -98,6 +104,38 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
       while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
       for (uint8_t u = 0; text[u] != '\0'; u++) { // Add the suffix
         buffer[i++] = text[u];
+      }
+      buffer[i] = '\0'; // Terminate string
+      interrupts();
+    }
+    void AutoPlex7::append(int32_t num) { // Add a suffix to the current display contents
+      noInterrupts();
+       
+      char string[(MAX_DIGITS * 2) + 1];
+      itoa(num, string, 10);
+
+      if (strlen(buffer) + strlen(string) + 1 > (MAX_DIGITS * 2)) { interrupts(); return; } // Don't add suffix if the current contents + suffix contain more characters than the library supports
+
+      uint8_t i = 0;
+      while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
+      for (uint8_t u = 0; string[u] != '\0'; u++) { // Add the suffix
+        buffer[i++] = string[u];
+      }
+      buffer[i] = '\0'; // Terminate string
+      interrupts();
+    }
+    void AutoPlex7::append(double num, uint8_t decimalPlaces) { // Add a suffix to the current display contents
+      noInterrupts();
+       
+      char string[(MAX_DIGITS * 2) + 1];
+      dtostrf(num, 0, decimalPlaces, string);
+
+      if (strlen(buffer) + strlen(string) + 1 > (MAX_DIGITS * 2)) { interrupts(); return; } // Don't add suffix if the current contents + suffix contain more characters than the library supports
+
+      uint8_t i = 0;
+      while (buffer[i] != '\0') { i++; } // Find the number of indexes before termination
+      for (uint8_t u = 0; string[u] != '\0'; u++) { // Add the suffix
+        buffer[i++] = string[u];
       }
       buffer[i] = '\0'; // Terminate string
       interrupts();
