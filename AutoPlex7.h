@@ -26,10 +26,14 @@ public:
     void testDisplay(unsigned long ms);
     void multiplex();
     void append(const char* text);
+    void append(int32_t num);
+    void append(double num, uint8_t decimalPlaces);
     void clear();
     void showNumber(int32_t num);
     void showNumberF(double num, uint8_t decimalPlaces);
     void print(const char* text);
+    void print(int32_t num);
+    void print(double num, uint8_t decimalPlaces);
 };
 
 #endif
