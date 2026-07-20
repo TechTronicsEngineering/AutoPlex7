@@ -13,7 +13,7 @@
 #define AUTOPLEX 1 // Automatic interrupt-based multiplexing
 #define MANUALPLEX 0 // Manual multiplexing flag
 
-extern uint8_t _displayIndex = 0;
+extern uint8_t _displayIndex;
 class AutoPlex7 {
 private:
     uint8_t digitsClass, digitPinsClass[MAX_DIGITS], segmentPinsClass[8];
