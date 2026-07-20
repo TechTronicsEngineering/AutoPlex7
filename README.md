@@ -1,12 +1,11 @@
 # AutoPlex7
 ### Control seven segment displays with ease.
-
-AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to eight digits. Unlike many other libraries for this purpose, AutoPlex7 automatically handles multiplexing in the background using Timer1. This means no calls to refresh the display; enabling AutoPlex7 to work with delays or other blocking functions in your code.
+AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to eight digits. Unlike traditional seven segment libraries, AutoPlex7 automatically handles multiplexing in the background using Timer1. This means no calls to refresh the display; enabling AutoPlex7 to work with delays or other blocking functions in your code.
 
 ## Features
 - Automatic multiplexing
 - Built to work with delays in your code
-- Works with both common cathode and common anode displays with up to 8 digits (can be easily modified to support over 200)
+- Works with both common cathode and common anode displays with up to eight digits (can be internally modified to support well beyond eight)
 - Has a flexible pin layout; letting you connect any display pin to any of Arduino's digital pins
 
 ## How to install
@@ -76,35 +75,35 @@ AutoPlex7 allows for display of three distinct data types using the `print()` me
 ###### For integers:
 To show a whole number on the seven segment display, you can use:
 ```C++
-MyDisplay.print(int32_t num)
+MyDisplay.print(int32_t num);
 ```
 This shows any integer you pass to it on the display. For example, if you wish to show "1234"...
 ```C++
-MyDisplay.print(1234)
+MyDisplay.print(1234);
 ```
 
 ###### Displaying a float
 The `print()` method also accepts floats/doubles.
 ```C++
-MyDisplay.showNumberF(double num, uint8_t decimalPlaces)
+MyDisplay.print(double num, uint8_t decimalPlaces);
 ```
 This method takes two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
 
 ###### Displaying a string
 Recent versions of AutoPlex7 also accept C-style string/character array input.
 ```C++
-MyDisplay.print(const char* text)
+MyDisplay.print(const char* text);
 ```
 This allows you to show a wide variety of characters - numbers, decimals, symbols, and all 26 letters (though some are approximations) of the alphabet.
 Using it to show something like "Abcd" is as simple as this:
 ```C++
-MyDisplay.print("Abcd")
+MyDisplay.print("Abcd");
 ```
 
 ### Appending characters to the display
-The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending new display contents may be performed with:
+The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing its original contents. This is especially useful if you're looking to display numeric data alongside units. Appending new display contents may be performed with:
 ```C++
-MyDisplay.append(...)
+MyDisplay.append(...);
 ```
 The `append()` method can handle character arrays, integers, and floats/doubles.
 
@@ -123,16 +122,16 @@ Or a float:
 MyDisplay.append(3.1415926536, 3); // Shows pi with 3 digits after the decimal
 ```
 
-###### *NOTE: it is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice potent flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts. If you need to use the ```append()``` method often, it's best disable automatic multiplexing and call `multiplex()` manually within ```loop().``` Be aware that this will mandate non-blocking code.*
+###### *NOTE: it is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice significant flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts. If you need to use the ```append()``` method often, it's best disable automatic multiplexing and call `multiplex()` manually within ```loop().``` Be aware that this will mandate non-blocking code.*
 
 ### Clearing the display
 From time to time, you might find yourself needing to clear the display. That can be done by simply calling:
 ```C++
-MyDisplay.clear()
+MyDisplay.clear();
 ```
 
 ### Multiplexing
-AutoPlex7 features a built-in `MyDisplay.multiplex()` method that refreshes the display. In AutoPlex7's typical configuration, it is called automatically on an interrupt under the hood. However, this can e disabled per-instance if desired. This allows you to call `multiplex()` from `loop(),` awarding you with finer control over the display. As this mandates non-blocking code, it is not rceommended for starters, but automatic display refreshes may be disabled when calling `begin()` on a new display object.
+AutoPlex7 features a built-in `MyDisplay.multiplex()` method that refreshes the display. In AutoPlex7's typical configuration, it is called automatically on an interrupt under the hood. However, this can be disabled per-instance if desired. This allows you to call `multiplex()` from `loop(),` granting you finer control over the display. As this mandates non-blocking code, it is not recommended for starters, but automatic display refreshes may be disabled when calling `begin()` on a new display object.
 Instead of calling:
 ```MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins);```
 ... to initialize a new display, you can replace it with:
@@ -174,7 +173,7 @@ void setup() {
 }
 
 void loop() {
-  display1.showNumber(1234);
+  display1.print(1234);
   display2.print("HI.");
 }
 ```
