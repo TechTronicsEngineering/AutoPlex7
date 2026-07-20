@@ -1,6 +1,8 @@
 #include "AutoPlex7.h"
 
-void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[]) {
+uint8_t _displayIndex = 0; // The array index of the last display instance
+
+void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[], bool multiplexing = AUTOPLEX) {
     // Decide based on the type of display what "on" represents
     switch (displayType) {
       case COMMON_ANODE: segmentOn = LOW; digitOn = HIGH; break;
@@ -26,16 +28,22 @@ void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], 
     G = segmentPinsClass[6];
     DP = segmentPinsClass[7];
 
-    // Configure timer1 for multiplexing at 1kHz
-    cli();
-    TCCR1A = 0;
-    TCCR1B = 0;
-    TCNT1  = 0;
-    OCR1A = 249;
-    TCCR1B |= (1 << WGM12);
-    TCCR1B |= (1 << CS11) | (1 << CS10);
-    TIMSK1 |= (1 << OCIE1A);
-    sei();
+    if (multiplexing == AUTOPLEX) {
+        manualplexing = false;
+        displays[_displayIndex++] = this; // Register new display instance
+        noInterrupts();
+        // Configure timer1 for multiplexing at 1kHz
+        TCCR1A = 0;
+        TCCR1B = 0;
+        TCNT1  = 0;
+        OCR1A = 249;
+        TCCR1B |= (1 << WGM12);
+        TCCR1B |= (1 << CS11) | (1 << CS10);
+        TIMSK1 |= (1 << OCIE1A);
+        interrupts();
+      } else {
+        manualplexing = true;
+      }
 
     // Configure display pins as outputs
     for (uint8_t i = 0; i < digitsClass; i++) { pinMode(digitPinsClass[i], OUTPUT); }
@@ -79,7 +87,7 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
     void AutoPlex7::print(double num, uint8_t decimalPlaces) {
       showNumberF(num, decimalPlaces);
     }
-    void AutoPlex7::testDisplay(unsigned long ms) { // Segment test
+    void AutoPlex7::testDisplay(unsigned long ms = 0) {
       uint8_t position = 0;
       noInterrupts();
       for (uint8_t i = 0; i < digitsClass; i++) {
@@ -87,7 +95,11 @@ void AutoPlex7::showNumber(int32_t num) { // Set the seven segment display's buf
       }
       buffer[position] = '\0';
       interrupts();
-      delay(ms);
+      unsigned long testStart = millis();
+      unsigned long lastPlex = millis();
+      while (millis() - testStart < ms) {
+        if (millis() - lastPlex >= 1 && manualplexing) { lastPlex = millis(); multiplex(); }
+      }
     }
     void AutoPlex7::clear() { // Empty the display buffer and deactivate all digits and segments
       noInterrupts();
@@ -234,4 +246,12 @@ void AutoPlex7::multiplex() { // Render the buffer onto the screen
       if (currentDigit + 1 < strlen(buffer) && buffer[currentDigit + 1] == '.') { digitalWrite(DP, segmentOn); } // If next character is a decimal, activate the DP on this digit
       displayPosition++; // Increase the counter that corresponds to physical display position
       if (currentDigit <= strlen(buffer)) { currentDigit++; } // Move on to the next digit when the next cycle is reached
+    }
+
+    AutoPlex7* AutoPlex7::displays[MAX_DISPLAYS] = { nullptr };
+
+    ISR(DISPLAY_REFRESH) {
+      for (uint8_t i = 0; i < _displayIndex; i++) {
+        AutoPlex7::displays[i]->multiplex();
+      }
     }
