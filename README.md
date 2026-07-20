@@ -35,15 +35,6 @@ Below that, we'll need to create an instance of the AutoPlex7 class. You can nam
 AutoPlex7 MyDisplay;
 ```
 
-Now that we have a display object, we need to enable its automated multiplexing. AutoPlex7 utilizes Timer1 to generate an interrupt every millisecond, and when this happens, the library should render the next character on the display. Setting this up is very easy, and takes just three lines of code:
-```C++
-ISR(DISPLAY_REFRESH) {
-  MyDisplay.multiplex();
-}
-```
-###### *DISPLAY_REFRESH is defined by the library as "TIMER1_COMPA_vect"*
-###### *If you're using more than one display, make sure to call multiplex() on all instances within the ISR.*
-
 Next, you'll need to configure a few settings and initialize the display. This should be done within setup(). 
 ```C++
 void setup() {
@@ -61,10 +52,6 @@ This will complete the setup process and activate the display. Here's an example
 
 AutoPlex7 MyDisplay;
 
-ISR(DISPLAY_REFRESH) {
-  MyDisplay.multiplex();
-}
-
 void setup() {
   bool displayType = COMMON_CATHODE;
   byte displayDigits = 4;
@@ -78,42 +65,65 @@ It's generally recommended that, after calling ```begin()``` you use the built i
 ```C++
 MyDisplay.testDisplay(1000);
 ```
-###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired. This is a blocking function.*
+###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired, or none at all if you'd like to calculate the timing manually.*
 
 ## Commands
 Now that you've initialized and tested your display, you can start using it. Let's take a look at the functions you can use to control the screen. We'll start with the most straightforward:
 
 ### Writing to the display
-AutoPlex7 features three distinct functions for printing different data types on the display.
+AutoPlex7 allows for display of three distinct data types using the `print()` method: integers, floats, and strings.
 
 ###### For integers:
-To show a whole number on the seven segment display, you can call:
+To show a whole number on the seven segment display, you can use:
 ```C++
-MyDisplay.showNumber(int32_t num)
+MyDisplay.print(int32_t num)
 ```
-This function shows any integer you pass to it on the display. For example, if you wish to show "1234," you can do this:
+This shows any integer you pass to it on the display. For example, if you wish to show "1234"...
 ```C++
-MyDisplay.showNumber(1234)
+MyDisplay.print(1234)
 ```
-However, it does not support decimals, and that's where the next function comes in:
 
 ###### Displaying a float
-AutoPlex7 features a separate function for displaying floats/doubles.
+The `print()` method also accepts floats/doubles.
 ```C++
 MyDisplay.showNumberF(double num, uint8_t decimalPlaces)
 ```
-This special ```showNumberF``` function accepts two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
+This method takes two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
 
 ###### Displaying a string
-The most recent versions of AutoPlex7 also accept string input.
+Recent versions of AutoPlex7 also accept C-style string/character array input.
 ```C++
 MyDisplay.print(const char* text)
 ```
-This is considered the easiest way to manipulate the display, and also the most versatile. It supports many different characters - numbers, decimals, symbols, and all 26 letters (though some are approximations) of the alphabet.
-Using ```print()``` to show something like "Abcd" is as simple as this:
+This allows you to show a wide variety of characters - numbers, decimals, symbols, and all 26 letters (though some are approximations) of the alphabet.
+Using it to show something like "Abcd" is as simple as this:
 ```C++
 MyDisplay.print("Abcd")
 ```
+
+### Appending characters to the display
+The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending new display contents may be performed with:
+```C++
+MyDisplay.append(...)
+```
+The `append()` method can handle character arrays, integers, and floats/doubles.
+
+If you want to append a character array, say "°C", to the display:
+```C++
+MyDisplay.append("*C"); // "*" is displayed as "°"
+```
+
+An integer:
+```
+MyDisplay.append(10);
+```
+
+Or a float:
+```
+MyDisplay.append(3.1415926536, 3); // Shows pi with 3 digits after the decimal
+```
+
+###### *NOTE: it is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice potent flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts. If you need to use the ```append()``` method often, it's best disable automatic multiplexing and call `multiplex()` manually within ```loop().``` Be aware that this will mandate non-blocking code.*
 
 ### Clearing the display
 From time to time, you might find yourself needing to clear the display. That can be done by simply calling:
@@ -121,28 +131,17 @@ From time to time, you might find yourself needing to clear the display. That ca
 MyDisplay.clear()
 ```
 
-### Appending characters to the display
-The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing it's original contents. This is especially useful if you're looking to display numeric data alongside units. Appending characters may be performed using the method:
-```C++
-MyDisplay.append(const char* text)
-```
-For instance, if you want to append "°C" to the display:
-```C++
-MyDisplay.append("*C") // "*" is displayed as "°"
-```
-However, it is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts.
-If you need to use the ```append()``` function often, it's best to remove the ```multiplex``` call from ```ISR(DISPLAY_REFRESH)``` and call it within ```loop()```. Be aware that this will mandate non-blocking code.
-
 ### Multiplexing
-AutoPlex7 features a built-in
-```C++
-MyDisplay.multiplex()
-```
-function that refreshes the display. It's designed to be continuously called from an ISR, but it may be removed from that and multiplexing performed manually if required.
+AutoPlex7 features a built-in `MyDisplay.multiplex()` method that refreshes the display. In AutoPlex7's typical configuration, it is called automatically on an interrupt under the hood. However, this can e disabled per-instance if desired. This allows you to call `multiplex()` from `loop(),` awarding you with finer control over the display. As this mandates non-blocking code, it is not rceommended for starters, but automatic display refreshes may be disabled when calling `begin()` on a new display object.
+Instead of calling:
+```MyDisplay.begin(displayType, displayDigits, digitPins, segmentPins);```
+... to initialize a new display, you can replace it with:
+```Mydisplay.begin(displayType, displayDigits, digitPins, segmentPins, MANUALPLEX);```
+This avoids registering display instance for the multiplexing interrupt routine.
 
 ## Using multiple displays
 Recent updates of AutoPlex7 were redesigned to support the use of multiple displays at once.
-Using two displays is almost exactly the same as using one; but just make sure to call multiplex() on all AutoPlex7 instances within the ISR and name parameter variables differently for each display to prevent compilation errors.
+Using two displays is almost identical to using one; just make sure to name the parameter variables differently for each instance to prevent compilation errors.
 
 A simple sketch using two displays:
 ```C++
@@ -150,12 +149,6 @@ A simple sketch using two displays:
 
 AutoPlex7 display1; // First display
 AutoPlex7 display2; // Second display
-
-ISR(DISPLAY_REFRESH) {
-  // Multiplex both displays
-  display1.multiplex();
-  display2.multiplex();
-}
 
 void setup() {
   // Assuming display1 is a 4-digit common cathode...
@@ -172,9 +165,9 @@ void setup() {
   byte segmentPins2[] = {15, 16, 17, 18, 19, 20, 21, 22};
   display2.begin(displayType2, displayDigits2, digitPins2, segmentPins2);
 
-  // Segment test the displays. Must be done manually with two displays; if you wish them to test simultaneously.
-  display1.print("8.8.8.8.");
-  display2.print("8.8.");
+  // Segment test the displays
+  display1.testDisplay();
+  display2.testDisplay();
   delay(1000); // 1 second segment test
   display1.clear();
   display2.clear();
