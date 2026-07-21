@@ -44,11 +44,6 @@
 AutoPlex7 SecondsDisplay; // Create an instance of AutoPlex7 for the seconds display
 AutoPlex7 FractionalDisplay; // Create an instance of AutoPlex7 for the fractional display
 
-ISR(DISPLAY_REFRESH) { // Set up automatic multiplexing for each display
-  SecondsDisplay.multiplex();
-  FractionalDisplay.multiplex();
-}
-
 void setup() {
   bool displayType1 = COMMON_CATHODE; // Change to "COMMON_ANODE" if using a common anode display
   byte displayDigits1 = 3; // Display has 3 digits
