@@ -27,11 +27,6 @@
 
 AutoPlex7 display; // Create a display object
 
-// Enable automatic multiplexing
-ISR(DISPLAY_REFRESH) {
-  display.multiplex();
-}
-
 // Create counter variable
 unsigned long seconds = 0;
 
