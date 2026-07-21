@@ -33,11 +33,6 @@
 
 AutoPlex7 display; // Create a display object
 
-// Enable automatic multiplexing
-ISR(DISPLAY_REFRESH) {
-  display.multiplex();
-}
-
 // Create variables
 unsigned long previousMillis = 0;
 const unsigned long interval = 1000;
