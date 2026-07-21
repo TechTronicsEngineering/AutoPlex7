@@ -28,11 +28,6 @@
 
 AutoPlex7 display; // Create a display object
 
-// Enable automatic multiplexing
-ISR(DISPLAY_REFRESH) {
-  display.multiplex();
-}
-
 const byte buttonPin = 13; // The pin the pushbutton is connected to
 
 unsigned int buttonPushCounter = 0; // Counter for the number of button presses
