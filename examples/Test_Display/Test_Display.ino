@@ -27,11 +27,6 @@
 
 AutoPlex7 display; // Create a display object
 
-// Enable automatic multiplexing
-ISR(DISPLAY_REFRESH) {
-  display.multiplex();
-}
-
 void hello() { // This function draws a scrolling "HELLO" animation
   display.print("   H");
   delay(150);
