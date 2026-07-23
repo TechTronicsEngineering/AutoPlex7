@@ -2,7 +2,7 @@
 
 uint8_t _displayIndex = 0; // The array index of the last display instance
 
-void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[], bool multiplexing = AUTOPLEX) {
+void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[], bool multiplexing) {
     // Decide based on the type of display what "on" represents
     switch (displayType) {
       case COMMON_ANODE: segmentOn = LOW; digitOn = HIGH; break;
