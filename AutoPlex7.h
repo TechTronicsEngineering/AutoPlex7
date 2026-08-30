@@ -7,7 +7,6 @@
 #define COMMON_CATHODE 1
 #define CAWDDT 2 // Common Anode With Digit Drive Transistors
 #define CCWDDT 3 // Common Cathode With Digit Drive Transistors
-#define DISPLAY_REFRESH TIMER1_COMPA_vect
 #define MAX_DIGITS 8 // Defines the maximum number of digits the library can support per display. You may increase this if you plan to use larger displays, at the cost of more memory usage
 #define MAX_DISPLAYS 8 // Defines the maximum number of total individual displays the library can control simultaneously. May be increased at the price of more memory usage
 #define AUTOPLEX 1 // Automatic interrupt-based multiplexing
