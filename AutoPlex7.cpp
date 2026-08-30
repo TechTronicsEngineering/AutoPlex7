@@ -32,14 +32,9 @@ void AutoPlex7::begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], 
         manualplexing = false;
         displays[_displayIndex++] = this; // Register new display instance
         noInterrupts();
-        // Configure timer1 for multiplexing at 1kHz
-        TCCR1A = 0;
-        TCCR1B = 0;
-        TCNT1  = 0;
-        OCR1A = 249;
-        TCCR1B |= (1 << WGM12);
-        TCCR1B |= (1 << CS11) | (1 << CS10);
-        TIMSK1 |= (1 << OCIE1A);
+        // Configure Timer0 for multiplexing
+        OCR0A = 0xAF;
+        TIMSK0 |= _BV(OCIE0A);
         interrupts();
       } else {
         manualplexing = true;
@@ -250,7 +245,7 @@ void AutoPlex7::multiplex() { // Render the buffer onto the screen
 
     AutoPlex7* AutoPlex7::displays[MAX_DISPLAYS] = { nullptr };
 
-    ISR(DISPLAY_REFRESH) {
+    ISR(TIMER0_COMPA_vect) {
       for (uint8_t i = 0; i < _displayIndex; i++) {
         AutoPlex7::displays[i]->multiplex();
       }
