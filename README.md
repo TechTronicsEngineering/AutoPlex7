@@ -1,6 +1,6 @@
 # AutoPlex7
 ### Control seven segment displays with ease.
-AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to eight digits. Unlike traditional seven segment libraries, AutoPlex7 automatically handles multiplexing in the background using Timer1. This means no calls to refresh the display; enabling AutoPlex7 to work with delays or other blocking functions in your code.
+AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to eight digits. Unlike traditional seven segment libraries, AutoPlex7 automatically handles multiplexing in the background using Timer0. This means no calls to refresh the display; enabling AutoPlex7 to work with delays or other blocking functions in your code.
 
 ## Features
 - Automatic multiplexing
