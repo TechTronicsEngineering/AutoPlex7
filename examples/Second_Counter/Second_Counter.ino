@@ -27,9 +27,6 @@
 
 AutoPlex7 display; // Create a display object
 
-// Create counter variable
-unsigned long seconds = 0;
-
 void setup() {
   bool displayType = COMMON_CATHODE; // Change to COMMON_ANODE if using a common anode display
   byte displayDigits = 4; // The display has 4 digits
@@ -41,7 +38,6 @@ void setup() {
 }
 
 void loop() {
-  display.showNumber(seconds); // Show the current number of seconds counted
-  delay(1000); // Wait one second
-  seconds++; // Add 1 to the seconds counter
+  float seconds = (float)millis() / 1000.0; // Calculate the number of seconds since the last reset
+  display.print(seconds); // Show seconds on the display, with a moving decimal point and automatically determined precision
 }
