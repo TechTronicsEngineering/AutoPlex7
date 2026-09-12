@@ -27,6 +27,42 @@
 
 AutoPlex7 display; // Create a display object
 
+font individualSegments[] = { // A font consisting of individually activated segments
+  { U'A', 0b1000000 },
+  { U'B', 0b0100000 },
+  { U'C', 0b0010000 },
+  { U'D', 0b0001000 },
+  { U'E', 0b0000100 },
+  { U'F', 0b0000010 },
+  { U'G', 0b0000001 },
+  END
+};
+
+void cycleSegments() { // This function makes an animation that cycles throughj the display segments at an increasing speed, then enables them all
+  display.setFont(individualSegments); // Enable the custom font of individually activated segments
+  for (unsigned int i = 50; i > 0; i-=5) { // Increase speed each cycle
+    // Loop through all segments
+    display.print("AAAA");
+    delay(i);
+    display.print("BBBB");
+    delay(i);
+    display.print("CCCC");
+    delay(i);
+    display.print("DDDD");
+    delay(i);
+    display.print("EEEE");
+    delay(i);
+    display.print("FFFF");
+    delay(i);
+    display.print("GGGG");
+    delay(i);
+  }
+  display.testDisplay(1000); // Light all segments for 1000 milliseconds (1 second)
+  display.setFont(defaultFont); // Return to default font
+  display.clear(); // Clear the display
+  delay(150); // Small pause
+}
+
 void hello() { // This function draws a scrolling "HELLO" animation
   display.print("   H");
   delay(150);
@@ -109,8 +145,7 @@ void setup() {
   byte segmentPins[] = {5, 6, 7, 8, 9, 10, 11, 12}; // A, B, C, D, E, F, G, DP
 
   display.begin(displayType, displayDigits, digitPins, segmentPins); // Initialize the display
-  display.testDisplay(1000); // Show all digits, numbers, and decimals for one second
-
+  cycleSegments();
   hello();
   introduceAutoPlex7();
 }
