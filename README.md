@@ -1,11 +1,17 @@
 # AutoPlex7
 ### Control seven segment displays with ease.
 AutoPlex7 is a simple and versatile Arduino library for controlling seven segment displays with up to eight digits. Unlike traditional seven segment libraries, AutoPlex7 automatically handles multiplexing in the background using Timer0. This means no calls to refresh the display; enabling AutoPlex7 to work with delays or other blocking functions in your code.
+Furthermore, it also supports fully custom fonts, Unicode display, and automatically applies floating point autoranging.
 
 ## Features
 - Automatic multiplexing
 - Built to work with delays in your code
-- Works with both common cathode and common anode displays with up to eight digits (can be internally modified to support well beyond eight)
+- Works with both common cathode and common anode displays
+- Can control up to 4 displays with up to 8 digits each simultaneously
+- Supports transistor drivers
+- Floating-point autoranging
+- Custom fonts
+- Unicode support
 - Has a flexible pin layout; letting you connect any display pin to any of Arduino's digital pins
 
 ## How to install
@@ -64,7 +70,7 @@ It's generally recommended that, after calling ```begin()``` you use the built i
 ```C++
 MyDisplay.testDisplay(1000);
 ```
-###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired, or none at all if you'd like to calculate the timing manually.*
+###### *The "1000" means the test lasts for 1,000 milliseconds (1 second). A different test duration can be input if desired.*
 
 ## Commands
 Now that you've initialized and tested your display, you can start using it. Let's take a look at the functions you can use to control the screen. We'll start with the most straightforward:
@@ -85,12 +91,12 @@ MyDisplay.print(1234);
 ###### Displaying a float
 The `print()` method also accepts floats/doubles.
 ```C++
-MyDisplay.print(double num, uint8_t decimalPlaces);
+MyDisplay.print(double num); // Automatically determines how many digits the display can fit after the decimal; autoranging
+MyDisplay.print(double num, uint8_t decimalPlaces); // Display a float/double with a specified precision
 ```
-This method takes two arguments. The first one is the value to print, and the second is the number of digits to show after the decimal point.
 
 ###### Displaying a string
-Recent versions of AutoPlex7 also accept C-style string/character array input.
+AutoPlex7 can also accept C-style string/character array input.
 ```C++
 MyDisplay.print(const char* text);
 ```
@@ -99,9 +105,13 @@ Using it to show something like "Abcd" is as simple as this:
 ```C++
 MyDisplay.print("Abcd");
 ```
+If you need to display a string containing Unicode characters, make sure to prefix it with a 'U.'
+```C++
+MyDisplay.print(U"2 µ°");
+```
 
 ### Appending characters to the display
-The AutoPlex7 library uses a char[] buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing its original contents. This is especially useful if you're looking to display numeric data alongside units. Appending new display contents may be performed with:
+The AutoPlex7 library uses a string buffer to internally store the contents of the display. It is possible to append more characters directly to this buffer without clearing its original contents. This is especially useful if you're looking to display numeric data alongside units. Appending new display contents may be performed with:
 ```C++
 MyDisplay.append(...);
 ```
@@ -109,7 +119,7 @@ The `append()` method can handle character arrays, integers, and floats/doubles.
 
 If you want to append a character array, say "°C", to the display:
 ```C++
-MyDisplay.append("*C"); // "*" is displayed as "°"
+MyDisplay.append(U"°C");
 ```
 
 An integer:
@@ -122,12 +132,38 @@ Or a float:
 MyDisplay.append(3.1415926536, 3); // Shows pi with 3 digits after the decimal
 ```
 
-###### *NOTE: it is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice significant flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts. If you need to use the ```append()``` method often, it's best disable automatic multiplexing and call `multiplex()` manually within ```loop().``` Be aware that this will mandate non-blocking code.*
+###### *NOTE 1: Currently, append(double) does not support autoranging. You must explicitly state precision as a second argument when calling the method.*
+
+###### *NOTE 2: It is strongly discouraged to use this method heavily with automated multiplexing. Should you choose to, you may notice significant flicker on the display. This is due to rendering of temporary or partially overwritten display states caused by interrupts. If you need to use the ```append()``` method often, it's best disable automatic multiplexing and call `multiplex()` manually within ```loop().``` Be aware that this will mandate non-blocking code.*
 
 ### Clearing the display
 From time to time, you might find yourself needing to clear the display. That can be done by simply calling:
 ```C++
 MyDisplay.clear();
+```
+
+### Custom fonts & characters
+AutoPlex7 allows for creation and usage of custom fonts. Inside a font, you can define a bitmap for almost any character you want, excluding U+0000, U+002E, and the segment test. These characters are either pre-defined, independent of fonts, or simply cannot be overridden. To make a font...
+```C++
+font myNewFont = {
+  { U'[character], 0b[bitmap] },
+  { U'[character], 0b[bitmap] },
+  ...
+  { U'[character], 0b[bitmap] },
+  END // Informs the renderer that it has reached the end of the font
+};
+```
+###### *NOTE: Bitmaps are ordered: SEGMENT A, B, C, D, E, F, G. A 1 represents an active segment, while a 0 represents an inactive segment.*
+
+To activate the custom font, we would call:
+```C++
+MyDisplay.setFont(myNewFont);
+```
+Now, all characters printed in the future will be as defined by `myNewFont`.
+
+You can revert back to the original font at any time.
+```C++
+MyDisplay.setFont(defaultFont);
 ```
 
 ### Multiplexing
