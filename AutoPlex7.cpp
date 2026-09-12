@@ -84,8 +84,8 @@ font defaultFont[] = {
   { U'u', 0b0011100 }, // Lowercase u
   { U'V', 0b0111110 }, // Uppercase V
   { U'v', 0b0011100 }, // Lowercase v
-  { U'W', 0b0011100 }, // Uppercase W
-  { U'w', 0b0011100 }, // Lowercase w
+  { U'W', 0b0101010 }, // Uppercase W
+  { U'w', 0b0101010 }, // Lowercase w
   { U'X', 0b0110111 }, // Uppercase X
   { U'x', 0b0110111 }, // Lowercase x
   { U'Y', 0b0111011 }, // Uppercase Y
