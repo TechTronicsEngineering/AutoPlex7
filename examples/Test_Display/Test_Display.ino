@@ -127,19 +127,19 @@ void loop() {
   delay(250);
 
   // Showcase numbers on the display
-  display.showNumber(1234); // Display "1234"
+  display.print(1234); // Display "1234"
   delay(1000); // Wait one second
-  display.showNumber(2345); // Show the next number "2345"
+  display.print(2345); // Show the next number "2345"
   delay(100); // Wait a tenth of a second..
-  display.showNumber(3456);
+  display.print(3456);
   delay(100);
-  display.showNumber(4567);
+  display.print(4567);
   delay(100);
-  display.showNumber(5678);
+  display.print(5678);
   delay(100);
-  display.showNumber(6789);
+  display.print(6789);
   delay(100);
-  display.showNumber(7890);
+  display.print(7890);
   delay(1000);
   display.clear();
 
