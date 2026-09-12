@@ -62,5 +62,5 @@ void loop() {
     buttonPushCounter = 0; // Reset counter so it doesn’t get too large
   }
 
-  display.showNumber(buttonPushCounter); // Display the number of presses
+  display.print(buttonPushCounter); // Display the number of presses
 }
