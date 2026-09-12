@@ -58,7 +58,7 @@ void loop() {
   unsigned long currentMillis = millis(); // Get the current time
   buttonState = digitalRead(13); // Check state of button
 
-  display.showNumber(timer); // Display the current set timer duration
+  display.print(timer); // Display the current set timer duration
 
   // Check if button is pressed
   if (buttonState) {
@@ -73,14 +73,14 @@ void loop() {
 
       seconds++; // Increment the seconds counter
     }
-    display.showNumber(seconds); // Print the number of seconds on the screen
+    display.print(seconds); // Print the number of seconds on the screen
 
     // Check if the number of seconds counted match what the timer is set to
     if (seconds >= timer) {
       display.clearDisplay(); // Remove the seconds being counted from the display
       // Blink the timer value on the screen to signal the end of the timer
-      display.showNumber(timer); delay(250); display.clearDisplay(); delay(250); display.showNumber(timer); delay(250); display.clearDisplay(); delay(250);
-      display.showNumber(timer); delay(250); display.clearDisplay(); delay(250); display.showNumber(timer); delay(250); display.clearDisplay(); delay(250);
+      display.print(timer); delay(250); display.clear(); delay(250); display.print(timer); delay(250); display.clear(); delay(250);
+      display.print(timer); delay(250); display.clear(); delay(250); display.print(timer); delay(250); display.clear(); delay(250);
       // Reset timer variables to 0
       timing = 0;
       previousMillis = 0;
