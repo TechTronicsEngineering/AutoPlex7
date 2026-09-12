@@ -8,37 +8,63 @@
 #define CAWDDT 2 // Common Anode With Digit Drive Transistors
 #define CCWDDT 3 // Common Cathode With Digit Drive Transistors
 #define MAX_DIGITS 8 // Defines the maximum number of digits the library can support per display. You may increase this if you plan to use larger displays, at the cost of more memory usage
-#define MAX_DISPLAYS 8 // Defines the maximum number of total individual displays the library can control simultaneously. May be increased at the price of more memory usage
+#define MAX_DISPLAYS 4 // Defines the maximum number of total individual displays the library can control simultaneously. May be increased at the price of more memory usage
 #define AUTOPLEX 1 // Automatic interrupt-based multiplexing
 #define MANUALPLEX 0 // Manual multiplexing flag
 
-extern uint8_t _displayIndex;
-class AutoPlex7 {
-private:
-    uint8_t digitsClass, digitPinsClass[MAX_DIGITS], segmentPinsClass[8];
-    uint8_t A, B, C, D, E, F, G, DP;
-    bool segmentOn, segmentOff;
-    bool digitOn, digitOff;
-    volatile uint8_t currentDigit = 0; // The character within the buffer which the multiplexing logic is currently on
-    volatile uint8_t displayPosition = 0; // The physical position of the current character on the display
-    char buffer[(MAX_DIGITS * 2) + 1] = ""; // Buffer to hold the contents of the display. Enough space for MAX_DIGITS characters, decimal points, and a null termination
-    bool manualplexing = false;
-    size_t filterDecimals(const char* string);
-    void wipeDisplay();
-public:
-    static AutoPlex7* displays[MAX_DISPLAYS];
-    void begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[], bool multiplexing = AUTOPLEX);
-    void testDisplay(unsigned long ms = 0);
-    void multiplex();
-    void append(const char* text);
-    void append(int32_t num);
-    void append(double num, uint8_t decimalPlaces);
-    void clear();
-    void showNumber(int32_t num);
-    void showNumberF(double num, uint8_t decimalPlaces);
-    void print(const char* text);
-    void print(int32_t num);
-    void print(double num, uint8_t decimalPlaces);
+struct glyph {
+  char32_t identifier;
+  uint8_t bitmap;
 };
 
+using font = const glyph;
+#define END { 0, 0 }
+
+extern font systemFont[];
+extern font defaultFont[];
+
+extern uint8_t _displayIndex;
+class AutoPlex7 {
+  private:
+    uint8_t digitsClass, digitPinsClass[MAX_DIGITS], segmentPinsClass[8];
+    bool segmentOn, segmentOff, digitOn, digitOff;
+    volatile uint8_t bufferPos = 0; // The character within the buffer which the multiplexing logic is currently reviewing
+    volatile uint8_t displayPos = 0; // The physical position of the current character on the display
+    static bool timerConfigured;
+    char32_t buffer[(MAX_DIGITS * 2) + 1] = U""; // Buffer to hold the contents of the display. Enough space for MAX_DIGITS characters, decimal points, and a null termination
+    font* currentFont = defaultFont;
+    bool manualplexing = false;
+    inline __attribute__ ((always_inline)) void fastWrite(uint8_t pin, bool val) {
+      uint8_t bit = digitalPinToBitMask(pin);
+      uint8_t port = digitalPinToPort(pin);
+      volatile uint8_t *out = portOutputRegister(port);
+      if (val) {
+        *out |= bit;
+      }else{
+        *out &= ~bit;
+      }
+    }
+    void wipeDisplay();
+    size_t filterDecimals(const char32_t* string);
+    size_t filterDecimals(const char* string);
+    char32_t* strcpy8to32(char32_t* dest, const char* src);
+    char32_t* strcpy32(char32_t* dest, const char32_t* src);
+    size_t strlen32(const char32_t* string);
+  public:
+    static AutoPlex7* displays[MAX_DISPLAYS];
+    bool begin(uint8_t displayType, uint8_t digits, uint8_t digitPins[], uint8_t segmentPins[], bool multiplexing = AUTOPLEX);
+    void testDisplay(unsigned long ms);
+    void multiplex();
+    void append(const char* text);
+    void append(const char32_t* text);
+    void append(int num);
+    void append(double num, uint8_t decimalPlaces);
+    void setFont(font* newFont);
+    void clear();
+    void print(const char* text);
+    void print(const char32_t* text);
+    void print(int num);
+    void print(double num, uint8_t decimalPlaces);
+    void print(double num);
+};
 #endif
