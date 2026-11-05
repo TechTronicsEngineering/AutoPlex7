@@ -247,7 +247,7 @@ void AutoPlex7::print(int num) { // Set the seven segment display's buffer to an
 }
 void AutoPlex7::print(double num) { // Set the seven segment display's buffer to a double/float
   uint8_t oldSREG = SREG;
-  int32_t numInt = num; // Truncate the float into an integer
+  int numInt = num; // Truncate the float into an integer
   char numIntString[11]; itoa(numInt, numIntString, 10); // Create a string containing the input as an integer
   if (strlen(numIntString) > digitsClass) { // If the new number is too large for the display...
     // Show dashes
@@ -258,12 +258,13 @@ void AutoPlex7::print(double num) { // Set the seven segment display's buffer to
     }
     buffer[position] = U'\0'; // Terminate string
     SREG = oldSREG;
+  }else{
+    uint16_t decimalPlaces = digitsClass - strlen(numIntString); // Calculate how many decimal places can fit on the display
+    char temporary[11]; dtostrf(num, 0, decimalPlaces, temporary); // Create a string for the display
+    noInterrupts();
+    strcpy8to32(buffer, temporary); // Copy the number into the display buffer
+    SREG = oldSREG;
   }
-  uint16_t decimalPlaces = digitsClass - strlen(numIntString); // Calculate how many decimal places can fit on the display
-  char temporary[11]; dtostrf(num, 0, decimalPlaces, temporary); // Create a string for the display
-  noInterrupts();
-  strcpy8to32(buffer, temporary); // Copy the number into the display buffer
-  SREG = oldSREG;
 }
 void AutoPlex7::print(double num, uint8_t decimalPlaces) { // Set the seven segment display's buffer to a double/float, with a fixed number of digits after the decimal point
   char temporary[11];
