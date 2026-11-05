@@ -258,8 +258,6 @@ void AutoPlex7::print(double num) { // Set the seven segment display's buffer to
     }
     buffer[position] = U'\0'; // Terminate string
     SREG = oldSREG;
-  }else{
-    strcpy8to32(buffer, temporary); // Copy the number into the display buffer
   }
   uint16_t decimalPlaces = digitsClass - strlen(numIntString); // Calculate how many decimal places can fit on the display
   char temporary[11]; dtostrf(num, 0, decimalPlaces, temporary); // Create a string for the display
