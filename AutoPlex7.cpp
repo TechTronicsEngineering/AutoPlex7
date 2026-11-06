@@ -246,25 +246,23 @@ void AutoPlex7::print(int num) { // Set the seven segment display's buffer to an
   SREG = oldSREG;
 }
 void AutoPlex7::print(double num) { // Set the seven segment display's buffer to a double/float
-  uint8_t oldSREG = SREG;
   int numInt = num; // Truncate the float into an integer
   char numIntString[11]; itoa(numInt, numIntString, 10); // Create a string containing the input as an integer
+  uint8_t oldSREG = SREG;
+  noInterrupts();
   if (strlen(numIntString) > digitsClass) { // If the new number is too large for the display...
     // Show dashes
     uint8_t position = 0;
-    noInterrupts();
     for (uint8_t i = 0; i < digitsClass; i++) {
       buffer[position++] = U'-';
     }
     buffer[position] = U'\0'; // Terminate string
-    SREG = oldSREG;
   }else{
     uint16_t decimalPlaces = digitsClass - strlen(numIntString); // Calculate how many decimal places can fit on the display
     char temporary[11]; dtostrf(num, 0, decimalPlaces, temporary); // Create a string for the display
-    noInterrupts();
     strcpy8to32(buffer, temporary); // Copy the number into the display buffer
-    SREG = oldSREG;
   }
+  SREG = oldSREG;
 }
 void AutoPlex7::print(double num, uint8_t decimalPlaces) { // Set the seven segment display's buffer to a double/float, with a fixed number of digits after the decimal point
   char temporary[11];
@@ -293,15 +291,14 @@ void AutoPlex7::append(const char32_t* text) { // Add a 32-bit string suffix to 
       buffer[position++] = U'-';
     }
     buffer[position] = U'\0'; // Terminate string
-    SREG = oldSREG;
-    return;
+  }else{
+    uint8_t i = 0;
+    while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
+    for (uint8_t u = 0; text[u] != U'\0'; u++) { // Add the suffix
+      buffer[i++] = text[u];
+    }
+    buffer[i] = U'\0'; // Terminate string
   }
-  uint8_t i = 0;
-  while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
-  for (uint8_t u = 0; text[u] != U'\0'; u++) { // Add the suffix
-    buffer[i++] = text[u];
-  }
-  buffer[i] = U'\0'; // Terminate string
   SREG = oldSREG;
 }
 void AutoPlex7::append(const char* text) { // Add an ASCII string suffix to the current display contents
@@ -314,15 +311,14 @@ void AutoPlex7::append(const char* text) { // Add an ASCII string suffix to the 
       buffer[position++] = U'-';
     }
     buffer[position] = U'\0'; // Terminate string
-    SREG = oldSREG;
-    return;
+  }else{
+    uint8_t i = 0;
+    while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
+    for (uint8_t u = 0; text[u] != U'\0'; u++) { // Add the suffix
+      buffer[i++] = (char32_t)text[u];
+    }
+    buffer[i] = U'\0'; // Terminate string
   }
-  uint8_t i = 0;
-  while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
-  for (uint8_t u = 0; text[u] != U'\0'; u++) { // Add the suffix
-    buffer[i++] = (char32_t)text[u];
-  }
-  buffer[i] = U'\0'; // Terminate string
   SREG = oldSREG;
 }
 void AutoPlex7::append(int num) { // Add an integer suffix to the current display contents
@@ -332,22 +328,21 @@ void AutoPlex7::append(int num) { // Add an integer suffix to the current displa
   strcpy8to32(string32, string8);
   uint8_t oldSREG = SREG;
   noInterrupts();
-  if (filterDecimals(buffer) + strlen32(string32) > digitsClass) { // If the current display contents + new contents is longer than the display...
+  if (filterDecimals(buffer) + strlen32(string32) > digitsClass) { // If the current display contents + new contents are longer than the display...
     // Show dashes instead
     uint8_t position = 0;
     for (uint8_t i = 0; i < digitsClass; i++) {
       buffer[position++] = U'-';
     }
     buffer[position] = U'\0'; // Terminate string
-    SREG = oldSREG;
-    return;
+  }else{
+    uint8_t i = 0;
+    while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
+    for (uint8_t u = 0; string32[u] != U'\0'; u++) { // Add the suffix
+      buffer[i++] = string32[u];
+    }
+    buffer[i] = U'\0'; // Terminate string
   }
-  uint8_t i = 0;
-  while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
-  for (uint8_t u = 0; string32[u] != U'\0'; u++) { // Add the suffix
-    buffer[i++] = string32[u];
-  }
-  buffer[i] = U'\0'; // Terminate string
   SREG = oldSREG;
 }
 void AutoPlex7::append(double num, uint8_t decimalPlaces) { // Add a double suffix to the current display contents
@@ -365,15 +360,14 @@ void AutoPlex7::append(double num, uint8_t decimalPlaces) { // Add a double suff
       buffer[position++] = U'-';
     }
     buffer[position] = U'\0'; // Terminate string
-    SREG = oldSREG;
-    return;
+  }else{
+    uint8_t i = 0;
+    while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
+    for (uint8_t u = 0; string32[u] != U'\0'; u++) { // Add the suffix
+      buffer[i++] = string32[u];
+    }
+    buffer[i] = U'\0'; // Terminate string
   }
-  uint8_t i = 0;
-  while (buffer[i] != U'\0') { i++; } // Find the number of indexes before termination
-  for (uint8_t u = 0; string32[u] != U'\0'; u++) { // Add the suffix
-    buffer[i++] = string32[u];
-  }
-  buffer[i] = U'\0'; // Terminate string
   SREG = oldSREG;
 }
 void AutoPlex7::testDisplay(unsigned long ms) {
